@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "crud.fullname" . }}-frontend
+  labels: 
+    {{- include "crud.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "crud.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "crud.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.RegSec }}
+      containers:
+        - name: appclient
+          image: {{ .Values.feImg }}
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+---
+apiVersion: v1                
+kind: Service                 
+metadata:                     
+  name: {{ include "crud.fullname" . }}-frontend
+  labels: 
+    {{- include "crud.labels" . | nindent 4 }}
+spec:
+  type: NodePort               
+  selector:
+    {{- include "crud.selectorLabels" . | nindent 6 }}
+  ports:                      
+  - port: {{ .Values.service.port }}
+    protocol: TCP
+    targetPort: {{ .Values.service.port }}

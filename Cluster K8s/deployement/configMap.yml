@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-config
+data:
+  name: db_example
+  database: jdbc:mysql://crudmysql:3306/db_example?allowPublicKeyRetrieval=TRUE&useSSL=false&serverTimezone=UTC

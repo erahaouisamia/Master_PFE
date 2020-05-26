@@ -1,0 +1,40 @@
+# Default values for crud.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+RegSec: prvrg
+ApiImg: 192.168.1.11:8083/springboot2-jpa-crud-example:latest
+feImg: 192.168.1.11:8083/angular_client:latest
+urldb: jdbc:mysql://crudapp-mysql:3306/db_example?allowPublicKeyRetrieval=TRUE&useSSL=false&serverTimezone=UTC
+
+#ApiImg:
+  #repository: repos.nexus.com:48083/springboot2-jpa-crud-example
+
+#feImg:
+  #repository: repos.nexus.com:48083/angular_client
+
+#feport: 80
+apiport: 8080
+#Service du frontend
+service:
+  type: NodePort
+  port: 80
+
+global:
+  namedb: db_example
+  userdb: root
+  passworddb: root
+  replicaCount: 1
+
+mysql:
+  PvStorage: 25Gi
+  PvcStorage: 20Gi
+  ingress:
+    enabled: false
+  service:
+    type: ClusterIP
+    port: 3306
+
+ingress:
+  hosts:
+    - host: crudapp.com

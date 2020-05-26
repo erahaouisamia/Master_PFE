@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crudserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crudapp
+  template:
+    metadata:
+      labels:
+        app: crudapp
+    spec:
+      imagePullSecrets:
+        - name: prvrg
+      containers:
+        - name: springboot2-jpa-crud-example
+          image: 192.168.1.12:8083/springboot2-jpa-crud-example:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          env:                  # Environment variables supplied to the Pod
+          - name: SPRING_DATASOURCE_USERNAME # Name of the environment variable
+            valueFrom:          # Get the value of environment variable from kubernetes secrets
+              secretKeyRef:
+                name: mysql
+                key: username
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: password
+          - name: SPRING_DATASOURCE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-initdb-config
+                key: database
+---
+apiVersion: v1                
+kind: Service                 
+metadata:                     
+  name: crudserver
+  labels:                     
+    app: crudapp
+spec:      
+  type: NodePort                   
+  selector:
+    app: crudapp 
+  ports:                      
+  - name: http
+    port: 8080
+    targetPort: 8080
