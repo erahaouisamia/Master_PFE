@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: configdb
-data:
-  name: {{ .Values.global.namedb }}
-  database: {{ .Values.urldb }}
