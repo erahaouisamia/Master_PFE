@@ -11,75 +11,75 @@ pipeline {
 
 	stages {
 		stage('Git Checkout backend'){
-            steps{
-		    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app/crud-api']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '3806cb43-a7b6-4fab-bc44-0098a39608e3', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
-	    }
-        }
-        stage('Backend') {
-        	agent{
-			docker{
-        			image 'maven:3.6.3-jdk-11'
-				args "-v ~/.m2:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2"
-			}
+            		steps{
+		    		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app/crud-api']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '3806cb43-a7b6-4fab-bc44-0098a39608e3', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
+	    		}
         	}
-        	stages{
-        		stage('Compile'){
-        			steps {
-  						sh label: '', script: 'mvn clean compile'
-                    }
-  				}
-        		stage('Unit test Backend') {
-  					steps {
-  						sh label: '', script: 'mvn clean test'
-  					}
-  					post {
-        				always {
-        					junit allowEmptyResults: true, testResults: 'app/crud-api/target/surefire-reports/*.xml'
-        				}
-        			}
+        	stage('Backend') {
+			agent{
+				docker{
+					image 'maven:3.6.3-jdk-11'
+					args "-v ~/.m2:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2"
+				}
+			}
+			stages{
+				stage('Compile'){
+					steps {
+						sh label: '', script: 'mvn clean compile'
+			    		}
+				}
+				stage('Unit test Backend') {
+					steps {
+						sh label: '', script: 'mvn clean test'
+					}
+					post {
+						always {
+							junit allowEmptyResults: true, testResults: 'app/crud-api/target/surefire-reports/*.xml'
+						}
+					}
 				}
 				stage('build jar'){
 					steps{
 						sh 'mvn clean package'
 					}
 				}
-        	}
+			}
 		}
-        stage('Git Checkout frontend'){
-            steps{
-		    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app/crud-frontend']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '3806cb43-a7b6-4fab-bc44-0098a39608e3', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
-	    }
-        }
+        	stage('Git Checkout frontend'){
+		    steps{
+			    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app/crud-frontend']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '3806cb43-a7b6-4fab-bc44-0098a39608e3', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
+		    }
+        	}
 		stage('Frontend'){
 			agent {
-			    docker { image 'node:latest' }
+				docker { image 'node:latest' }
 			}
 			stages {
-			//verifier l'installation de npm
+				//verifier l'installation de npm
 				stage('Install') {
-			     	steps { sh 'npm install' }
-			    }
-			    stage('Test') {
-				    steps { sh 'npm run test' }
-			    }
-			    stage('Build') {
-			    	steps { sh 'npm run build' }
-			    }
-			  }
+					steps { sh 'npm install' }
+				}
+				stage('Test') {
+					steps { sh 'npm run test' }
+				}
+				stage('Build') {
+					steps { sh 'npm run build' }
+				}
+			}
 		}
-      	stage ('docker image build')
-        {
-            steps {
-                sh 'docker build -t backend:v1 -f .app/crud-api/Dockerfile'
-                sh 'docker build -t frontend:v1 -f app/crud-frontend/Dockerfile'      
-            }
-        }
-        stage ('docker image push to Nexus') {
-            steps {               
-                sh 'docker login -u admin -p repos_idemia 192.168.1.14:8083'
-                sh 'docker push backend:v1'
-                sh 'docker push frontend:v1'                        
-            }
-        }
-    }
+		stage ('docker image build')
+		{
+		    steps {
+			sh 'docker build -t backend:v1 -f .app/crud-api/Dockerfile'
+			sh 'docker build -t frontend:v1 -f app/crud-frontend/Dockerfile'      
+		    }
+		}
+        	stage ('docker image push to Nexus') {
+		    steps {               
+			sh 'docker login -u admin -p repos_idemia 192.168.1.14:8083'
+			sh 'docker push backend:v1'
+			sh 'docker push frontend:v1'                        
+		    }
+        	}
+    	}
 }
