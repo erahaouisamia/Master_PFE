@@ -17,7 +17,10 @@ pipeline {
         }
         stage('Backend') {
         	agent{
-        		image 'maven:3.6.3-jdk-11' args "-v ~/.m2:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2"
+			docker{
+        			image 'maven:3.6.3-jdk-11'
+				args "-v ~/.m2:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2"
+			}
         	}
         	stages{
         		stage('Compile'){
