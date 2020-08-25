@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class EmployeeService {
 
-  private baseUrl = 'http://crud-app.com:8090/api/v1/employees';
+  private baseUrl = 'http://crudemployee.com:8090/api/v1/employees';
 
   constructor(private http: HttpClient) { }
 
