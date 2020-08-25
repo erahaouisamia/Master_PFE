@@ -1,6 +1,6 @@
 pipeline {
 	agent{
-		label 'docker'
+		label 'master'
 	}
 	triggers {
 		pollSCM('* * * * *') //runs this pipeline on every commit
