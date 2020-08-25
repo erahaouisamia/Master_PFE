@@ -1,13 +1,13 @@
 pipeline {
-	agent none
-	 triggers {
-        pollSCM('* * * * *') //runs this pipeline on every commit
-        cron('30 23 * * *') //run at 23:30:00 
-    }
+	agent any
+	triggers {
+		pollSCM('* * * * *') //runs this pipeline on every commit
+		cron('30 23 * * *') //run at 23:30:00 
+    	}
 
 	environment {
-    	JAVA_TOOL_OPTIONS = "-Duser.home=/var/maven"
-    }
+    		JAVA_TOOL_OPTIONS = "-Duser.home=/var/maven"
+    	}
 
 	stages {
 		stage('Git Checkout backend'){
