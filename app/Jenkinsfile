@@ -1,5 +1,7 @@
 pipeline {
-	agent any
+	agent{
+		label 'slave'
+	}
 	triggers {
 		pollSCM('* * * * *') //runs this pipeline on every commit
 		cron('30 23 * * *') //run at 23:30:00 
