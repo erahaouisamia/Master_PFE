@@ -1,10 +1,10 @@
 pipeline {
 	agent{
-		label 'slave'
+		label 'docker'
 	}
 	triggers {
 		pollSCM('* * * * *') //runs this pipeline on every commit
-		cron('30 23 * * *') //run at 23:30:00 
+		//cron('30 23 * * *') //run at 23:30:00 
     	}
 
 	environment {
