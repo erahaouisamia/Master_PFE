@@ -12,6 +12,10 @@ pipeline {
     	}
 
 	stages {
+		stage('Initialize'){
+        		def dockerHome = tool 'jenkins_docker'
+        		env.PATH = "${dockerHome}/bin:${env.PATH}"
+    		}
 		stage('Git Checkout backend'){
             		steps{
 		    		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app/crud-api']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '3f3989e4-26ae-45b9-875b-b7cf6adeeae3', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
