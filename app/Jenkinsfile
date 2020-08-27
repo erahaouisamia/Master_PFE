@@ -60,7 +60,7 @@ pipeline {
 					steps { sh 'npm install' }
 				}
 				stage('Build') {
-					steps { sh 'npm run build —- —-prod' }
+					steps { sh 'npm run build -- --prod' }
 				}
 			}
 		}
@@ -76,6 +76,12 @@ pipeline {
 			sh 'docker login -u admin -p repos_idemia 192.168.1.16:8083'
 			sh 'docker push backend:v1'
 			sh 'docker push frontend:v1'                        
+		    }
+        	}
+		stage ('docker image push to Nexus') {
+		    steps {               
+			sh 'docker run idd1/helm repo add helmRepo http://localhost:8081/repository/test/ --username admin --password nexus_repos'
+			sh docker run idd1/helm nexus-push helmRepo app/helmchart --username admin --password nexus_repos'
 		    }
         	}
     	}
