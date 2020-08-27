@@ -1,0 +1,32 @@
+{
+  "variables": {
+    "aws_access_key": "AKIAIVL6CPRLCBLIQMAA",
+    "aws_secret_key": "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"
+  },
+  
+  "builders": 
+  [
+    {
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "eu-west-2",
+    "source_ami": "ami-006a0174c6c25ac06",
+    "instance_type": "t2.medium",
+    "ssh_username": "ubuntu",
+    "ssh_keypair_name": "keypair_aws",
+    "ssh_private_key_file": "aws/Packer_terraform/keypair_aws.pem",
+    "ami_name": "jenkins-image-Packer"
+  }
+  ],
+  "provisioners":[
+    {
+     "type":"shell",
+     "script": "aws/Packer_terraform/jenkins/setup.sh" 
+  },
+    {
+     "type":"ansible-local",
+     "playbook_file": "aws/Packer_terraform/jenkins/install_nexus_jenkins.yaml"
+  }
+  ]
+}

@@ -1,0 +1,109 @@
+---
+- hosts: localhost
+  become: yes
+  become_user: root
+  tasks:
+  - name: Install packages that allow apt to be used over HTTPS
+    apt:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+
+  - name: Add an apt signing key for Docker
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add apt repository for stable version
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+      state: present
+
+  - name: Install docker and its dependecies
+    apt: 
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io
+    notify:
+      - docker status
+
+  - name: Install Docker Module for Python
+    pip:
+      name: docker
+
+  - name: Add ubuntu user to docker group
+    user:
+      name: ubuntu
+      group: docker
+
+  - name: set up a nexus-data directory to make volume for docker container
+    file: path=/nexus-data state=directory mode=777 group=root owner=200
+    tags:
+    - setup
+    - nexus-data
+
+  - name: Start nexus docker container
+    docker_container:
+      name: "nexus3"
+      image: "sonatype/nexus3"
+      restart_policy: on-failure
+      ports:
+        - "8081:8081"
+      exposed_ports:
+        - 8081
+      published_ports:
+        - 8081
+      volumes: 
+        - /nexus-data:/nexus-data
+
+  - name: Ensure jenkins directory on docker host
+    file:
+      state: directory
+      owner: 1000
+      group: 1000
+      path: /share/jenkins
+
+  - name: Create a container from the jenkins docker image
+    docker_container:
+      name: "jenkins"
+      image: "jenkins/jenkins"
+      user: root
+      restart_policy: on-failure
+      ports:
+        - "8080:8080"
+      exposed_ports:
+        - 8080
+      published_ports:
+        - 8080
+      volumes:
+          - "/share/jenkins:/var/jenkins_home"
+          - "/var/run/docker.sock:/var/run/docker.sock"
+    command: "{{ item }}"
+    with_items:
+      - docker exec -it --user="root" jenkins curl -sSL https://get.docker.com/ -o get-docker.sh
+      - docker exec -it --user="root" jenkins sh get-docker.sh
+      - docker exec -it --user="root" jenkins usermod -aG docker jenkins
+    
+  - name: Copy systemd service script to start and stop the jenkins container
+    copy: src=files/jenkins.service dest=/etc/systemd/system
+
+  - name: Reload systemctl
+    shell: systemctl reload-or-restart docker-jenkins
+
+  - name: Enable the docker-jenkins service
+    shell: systemctl enable docker-jenkins
+
+  handlers:
+      - name: docker status
+        service: name=docker state=started
