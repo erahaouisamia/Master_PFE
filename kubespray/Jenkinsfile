@@ -9,7 +9,7 @@ pipeline {
     		}
 		stage('Install requirements'){
 			steps {
-				sh label: '', script: 'pip install -r requirements.txt'
+				sh label: '', script: 'virtualenv venv && . venv/bin/activate && pip install -r requirements.txt'
 		      	}
 		}
 		stage('terraform') {
