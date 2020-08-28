@@ -51,58 +51,8 @@ module "aws-elb" {
 *
 */
 
-data "aws_ami" "aws-db" {
-
-  most_recent = true
-  owners      = ["self"]
-
-  filter {
-    name   = "name"
-    values = ["aws-postgress_db-image*"]
-
-
-  }
-}
-
-
-resource "aws_instance" "db" {
-    
-#    count                       = length(var.aws_cidr_subnets_public)
-    ami = data.aws_ami.aws-db.id
-    instance_type = var.aws_bastion_size
-    key_name = var.AWS_SSH_KEY_NAME
-    availability_zone           = element(slice(data.aws_availability_zones.available.names, 0, 2), 0)
-    subnet_id = element(module.aws-vpc.aws_subnet_ids_private, 0)
-    vpc_security_group_ids =  module.aws-vpc.aws_security_group
-    associate_public_ip_address = false
-
-
-}
-
-#resource "aws_db_subnet_group" "db_subnet" {
-#  name       = "db-subnet-group"
-#  subnet_ids = module.aws-vpc.aws_subnet_ids_private
-
-#}
-
-#resource "aws_db_instance" "postgres" {
-#  allocated_storage      = 20
-#  storage_type           = "gp2"
-#  engine                 = "postgres"
-#  engine_version         = "12.3"
-#  instance_class         = "db.t2.micro"
-#  name                   = "employeedb"
-#  username               = "postgres"
-#  password               = "postgres2020$"
-#  port                   = "5432"
-#  db_subnet_group_name   = aws_db_subnet_group.db_subnet.id
-#  vpc_security_group_ids = module.aws-vpc.aws_security_group
-#  publicly_accessible    = false
-#  skip_final_snapshot    = true
-#}
-
 resource "aws_instance" "bastion-server" {
-  ami                         = "ami-00f6a0c18edb19300"
+  ami                         = "ami-006a0174c6c25ac06"
   instance_type               = var.aws_bastion_size
  # count                       = length(var.aws_cidr_subnets_public)
   count                       = var.aws_kube_master_num
@@ -131,7 +81,7 @@ resource "aws_instance" "bastion-server" {
 */
 
 resource "aws_instance" "k8s-master" {
-  ami           = "ami-00f6a0c18edb19300"
+  ami           = "ami-006a0174c6c25ac06"
   instance_type = var.aws_kube_master_size
 
   count = var.aws_kube_master_num
@@ -163,7 +113,7 @@ resource "aws_elb_attachment" "attach_master_nodes" {
 }
 
 resource "aws_instance" "k8s-etcd" {
-  ami           = "ami-00f6a0c18edb19300"
+  ami           = "ami-006a0174c6c25ac06"
   instance_type = var.aws_etcd_size
 
   count = var.aws_etcd_num
@@ -185,7 +135,7 @@ resource "aws_instance" "k8s-etcd" {
 }
 
 resource "aws_instance" "k8s-worker" {
-  ami           = "ami-00f6a0c18edb19300"
+  ami           = "ami-006a0174c6c25ac06"
   instance_type = var.aws_kube_worker_size
 
   count = var.aws_kube_worker_num
