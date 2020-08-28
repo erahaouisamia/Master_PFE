@@ -1,0 +1,15 @@
+secret:
+  database_uri:
+    dbip:
+    username: admin_user
+    password: adminuser2020$
+    dbport: 5432
+    dbname: employeedb
+    dbconn: ?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
+image:
+  repository: 52.254.19.67:5000/backend
+  tag: "0.0.2"
+replicaCount: 1
+service:
+  type: NodePort
+  port: 8080

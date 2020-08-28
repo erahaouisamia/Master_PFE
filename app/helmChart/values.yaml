@@ -1,0 +1,14 @@
+backend:
+  secret:
+    database_uri:
+      dbip:
+ingress:
+  hosts:
+    - host:
+        domain: frontend.employees-app.tk
+        chart: frontend
+        port: 80
+    - host:
+        domain: employees-app.tk
+        chart: backend
+        port: 8080
