@@ -7,23 +7,27 @@ pipeline {
             			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'kubespray']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
       			}
     		}
-		stage('Install requirements'){
-			steps {
-				sh label: '', script: 'virtualenv venv && . venv/bin/activate && pip install -r requirements.txt'
-		      	}
-		}
-		stage('terraform') {
+		stage('kubespray') {
 		      	agent{
 				docker{
 			      		image 'hashicorp/terraform'
 				}
 		      	}
-		      	steps{
-				dir("kubespray/contrib/terraform/aws/terraform"){
-				//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
-				  sh label: '', script: 'docker run hashicorp/terraform init'
-				  sh label: '', script: 'docker run hashicorp/terraform plan kubespray -var-file=credentials.tfvars'
-				  sh label: '', script: 'terraform apply "kubespray"'
+			stages{
+				stage('Install requirements'){
+					steps {
+						sh label: '', script: 'virtualenv venv && . venv/bin/activate && pip install -r requirements.txt'
+					}
+				}
+				stage('terraform'){
+					steps{
+						dir("kubespray/contrib/terraform/aws/terraform"){
+						//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
+						  sh label: '', script: 'docker run hashicorp/terraform init'
+						  sh label: '', script: 'docker run hashicorp/terraform plan kubespray -var-file=credentials.tfvars'
+						  sh label: '', script: 'terraform apply "kubespray"'
+						}
+					}
 				}
 			}
 		 }
