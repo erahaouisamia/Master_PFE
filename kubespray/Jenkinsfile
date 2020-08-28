@@ -14,7 +14,9 @@ pipeline {
 		}
 		stage('terraform') {
 		      	agent{
-			      image 'hashicorp/terraform'
+				docker{
+			      		image 'hashicorp/terraform'
+				}
 		      	}
 		      	steps{
 				dir("kubespray/contrib/terraform/aws/terraform"){
@@ -27,7 +29,9 @@ pipeline {
 		 }
 		    stage('Ansible') {
 			    agent{
-				image 'geektechstuff/ansible_container'
+				    docker{
+					image 'geektechstuff/ansible_container'
+				    }
 			    }
 			    steps {
 				dir("kubespray"){
