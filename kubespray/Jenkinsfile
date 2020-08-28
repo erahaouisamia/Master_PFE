@@ -7,13 +7,6 @@ pipeline {
             			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'kubespray']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
       			}
     		}
-		stage('Install requirements'){
-			steps {
-				withEnv(["HOME=${env.WORKSPACE}"]) {
-					sh label: '', script: 'pip install --user -r requirements.txt'
-				}
-			}
-		}
 		stage('terraform'){
 		      	agent{
 				docker{
