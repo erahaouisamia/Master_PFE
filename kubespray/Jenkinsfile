@@ -19,9 +19,9 @@ pipeline {
 			steps{						
 				//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
 				sh label: '', script: 'docker pull hashicorp/terraform'
-				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform init /app/contrib/terraform/aws'
-				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform plan -out /app/contrib/terraform/aws/kubespray --var-file=contrib/terraform/aws/credentials.tfvars'
-				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform apply "/app/contrib/terraform/aws/kubespray"'
+				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraform hashicorp/terraform init /var/terraform/contrib/terraform/aws'
+				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraform hashicorp/terraform plan -out /var/terraform/contrib/terraform/aws/kubespray --var-file=contrib/terraform/aws/credentials.tfvars'
+				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraform hashicorp/terraform apply "/var/terraformcontrib/terraform/aws/kubespray"'
 			}
 		}
 		stage('Ansible') {
@@ -32,7 +32,7 @@ pipeline {
 			 //}
 			 steps {
 					sh label: '', script: 'docker pull geektechstuff/ansible_container'
-					sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app geektechstuff/ansible_container -i app/inventory/hosts app/cluster.yml -e ansible_user=core -b --become-user=root --flush-cache'
+					sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/ansible geektechstuff/ansible_container -i /var/ansible/inventory/hosts /var/ansible/cluster.yml -e ansible_user=core -b --become-user=root --flush-cache'
 				}
 		}
   }
