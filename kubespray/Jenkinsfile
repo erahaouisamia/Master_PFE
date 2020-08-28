@@ -9,7 +9,9 @@ pipeline {
     		}
 		stage('Install requirements'){
       			steps {
-        			sh label: '', script: 'pip3 install -r requirements.txt'
+				withEnv(["HOME=${env.WORKSPACE}"]) {
+        				sh label: '', script: 'pip3 install -r requirements.txt'
+				}
       			}
     		}
 		stage('terraform'){
