@@ -19,9 +19,9 @@ pipeline {
 			steps{						
 				//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
 				sh label: '', script: 'docker pull hashicorp/terraform'
-				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraform hashicorp/terraform init /var/terraform/contrib/terraform/aws'
-				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraform hashicorp/terraform plan -out /var/terraform/contrib/terraform/aws/kubespray --var-file=contrib/terraform/aws/credentials.tfvars'
-				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraform hashicorp/terraform apply "/var/terraformcontrib/terraform/aws/kubespray"'
+				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraformRepo hashicorp/terraform init /var/terraformRepo/contrib/terraform/aws'
+				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraformRepo hashicorp/terraform plan -out /var/terraformRepo/contrib/terraform/aws/kubespray --var-file=contrib/terraform/aws/credentials.tfvars /var/terraformRepo/contrib/terraform/aws'
+				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/var/terraformRepo hashicorp/terraform apply "/var/terraformRepo/contrib/terraform/aws/kubespray"'
 			}
 		}
 		stage('Ansible') {
