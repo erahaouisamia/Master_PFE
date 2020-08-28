@@ -20,6 +20,7 @@ pipeline {
 				//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
 				sh label: '', script: 'docker pull hashicorp/terraform'
 				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform init /app/contrib/terraform/aws'
+				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform cat /app/contrib/terraform/aws/credentials.tfvars'
 				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform plan -out /app/contrib/terraform/aws/kubespray -var-file=/app/contrib/terraform/aws/credentials.tfvars'
 				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform apply "/app/contrib/terraform/aws/kubespray"'
 			}
