@@ -1,6 +1,8 @@
 pipeline {
 	agent any
-
+	triggers {
+		pollSCM('* * * * *') //runs this pipeline on every commit
+    	}
 	stages {
 		stage("Git Checkout"){
       			steps{
