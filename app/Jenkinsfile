@@ -79,10 +79,16 @@ pipeline {
 		    }
         	}
 		stage ('docker image push to Nexus') {
-		    steps {               
-			sh 'docker run idd1/helm repo add helmRepo http://172.31.16.10:8081/repository/helmRepo/ --username admin --password nexus_repos'
-			sh docker run idd1/helm nexus-push helmRepo app/helmchart --username admin --password nexus_repos'
-		    }
+			agent{
+				docker{
+					image 'idd1/helm'
+					//args "-v ~/.m2:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2"
+				}
+			}
+		    	steps {               
+				sh 'docker run idd1/helm repo add helmRepo http://172.31.16.10:8081/repository/helmRepo/ --username admin --password nexus_repos'
+				sh 'docker run idd1/helm nexus-push helmRepo app/HelmChart --username admin --password nexus_repos'
+		    	}
         	}
     	}
 }
