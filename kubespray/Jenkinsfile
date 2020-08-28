@@ -14,7 +14,7 @@ pipeline {
 				}
 		      	}
 			steps{
-				dir("kubespray/contrib/terraform/aws/terraform"){
+				dir("kubespray/contrib/terraform/aws"){
 						//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
 					sh label: '', script: 'docker run hashicorp/terraform init'
 					sh label: '', script: 'docker run hashicorp/terraform plan kubespray -var-file=credentials.tfvars'
