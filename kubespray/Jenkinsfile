@@ -2,10 +2,10 @@ pipeline {
 	agent any
 
 	stages {
-		stage("Git Checkout"){
+		stage("Git Checkout && pull terraform img"){
       			steps{
             			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'kubespray']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
-      			}
+			}
     		}
 		stage('terraform'){
 		      	agent{
@@ -14,9 +14,9 @@ pipeline {
 				}
 		      	}
 			steps{						//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
-				sh label: '', script: 'docker run -v `pwd`:/app hashicorp/terraform init /app/contrib/terraform/aws/'
-				sh label: '', script: 'docker run -v `pwd`:/app hashicorp/terraform plan /app/contrib/terraform/aws/kubespray -var-file=credentials.tfvars'
-				sh label: '', script: 'terraform apply "/app/contrib/terraform/aws/kubespray"'
+				sh label: '', script: 'docker run -w /app -v /root/.aws:/root/.aws -v `pwd`:/app hashicorp/terraform init /app/contrib/terraform/aws/'
+				sh label: '', script: 'docker run -w /app -v /root/.aws:/root/.aws-v `pwd`:/app hashicorp/terraform plan /app/contrib/terraform/aws/kubespray -var-file=credentials.tfvars'
+				sh label: '', script: 'docker run -w /app -v /root/.aws:/root/.aws -v `pwd`:/app hashicorp/terraform apply "/app/contrib/terraform/aws/kubespray"'
 			}
 		}
 		stage('Ansible') {
