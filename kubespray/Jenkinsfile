@@ -6,6 +6,7 @@ pipeline {
       			steps{
             			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'kubespray']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
 				git credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia'
+				sh label: '', script: 'ls ~/repo_idemia/kubespray'
 			}
     		}
 		stage('terraform'){
