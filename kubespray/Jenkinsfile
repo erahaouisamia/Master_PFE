@@ -6,7 +6,6 @@ pipeline {
       			steps{
             			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'kubespray']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
 				//git credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia'
-				sh label: '', script: 'ls ~/workspace/k8s-cluster/kubespray'
 			}
     		}
 		stage('terraform'){
@@ -19,7 +18,7 @@ pipeline {
 				//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
 				sh label: '', script: 'docker pull hashicorp/terraform'
 				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform init /app/contrib/terraform/aws'
-				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform plan -out /app/contrib/terraform/aws/kubespray -var-file=app/repo_idemia/kubespray/contrib/terraform/aws/credentials.tfvars'
+				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform plan -out /app/contrib/terraform/aws/kubespray -var-file=app//contrib/terraform/aws/credentials.tfvars'
 				sh label: '', script: 'docker run -v ~/workspace/k8s-cluster/kubespray:/app hashicorp/terraform apply "/app/contrib/terraform/aws/kubespray"'
 			}
 		}
