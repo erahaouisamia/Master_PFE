@@ -33,4 +33,3 @@ default_tags = {
 }
 
 inventory_file = "../../../inventory/hosts"
-custom_var_file ="../../../main.yml"
