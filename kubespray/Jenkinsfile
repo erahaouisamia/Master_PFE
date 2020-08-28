@@ -14,34 +14,32 @@ pipeline {
 				}
 			}
 		}
-		stage('kubespray') {
+		stage('terraform'){
 		      	agent{
 				docker{
 			      		image 'hashicorp/terraform'
 				}
 		      	}
-			stage('terraform'){
-				steps{
-					dir("kubespray/contrib/terraform/aws/terraform"){
+			steps{
+				dir("kubespray/contrib/terraform/aws/terraform"){
 						//sh label: '', script: 'cd kubespray/contrib/terraform/aws/terraform'
-						  sh label: '', script: 'docker run hashicorp/terraform init'
-						  sh label: '', script: 'docker run hashicorp/terraform plan kubespray -var-file=credentials.tfvars'
-						  sh label: '', script: 'terraform apply "kubespray"'
-					}
+					sh label: '', script: 'docker run hashicorp/terraform init'
+					sh label: '', script: 'docker run hashicorp/terraform plan kubespray -var-file=credentials.tfvars'
+					sh label: '', script: 'terraform apply "kubespray"'
 				}
 			}
 		}
-		    stage('Ansible') {
-			    agent{
-				    docker{
+		stage('Ansible') {
+			agent{
+				docker{
 					image 'geektechstuff/ansible_container'
-				    }
-			    }
-			    steps {
+				 }
+			 }
+			 steps {
 				dir("kubespray"){
 					sh label: '', script: 'docker run geektechstuff/ansible_container -i ./inventory/hosts ./cluster.yml -e ansible_user=core -b --become-user=root --flush-cache'
 				}
 		      	    }
-			}
+		}
   }
 }
