@@ -14,9 +14,9 @@ pipeline {
     	//}
 
 	stages {
-		stage('Git Checkout backend'){
+		stage('Git Checkout'){
             		steps{
-		    		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app/crud-api']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
+		    		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
 	    		}
         	}
         	stage('Backend') {
@@ -56,19 +56,6 @@ pipeline {
 				}
 			}
 		}
-		stage ('docker image build api')
-		{
-		    steps {
-			dir("${env.WORKSPACE}/app/crud-api"){
-				sh 'docker build -t backend:v1 -f app/crud-api/Dockerfile .'
-			}
-		    }
-		}
-		stage('Git Checkout frontend'){
-			steps{
-				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app/crud-frontend']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
-		    	}
-        	}
 		stage('Frontend'){
 			agent {
 				docker { image 'node:latest' }
@@ -87,22 +74,23 @@ pipeline {
 					}
 				}
 			}
-			stage ('docker image build api')
+		}
+		stage ('docker image build api')
+		{
+		    steps {
+			dir("${env.WORKSPACE}/app/crud-api"){
+				sh 'docker build -t backend:v1 -f./Dockerfile .'
+			}
+		    }
+		}
+		stage ('docker image build api')
 			{
 			    steps {
 				dir("${env.WORKSPACE}/app/crud-frontend"){
-					sh 'docker build -t frontend:v1 -f app/crud-frontend/Dockerfile .' 
+					sh 'docker build -t frontend:v1 -f ./Dockerfile .' 
 				}
 			    }
 			}
-		}
-		//stage ('docker image build')
-		//{
-		    //steps {
-			//sh 'docker build -t backend:v1 -f .app/crud-api/Dockerfile .'
-			//sh 'docker build -t frontend:v1 -f app/crud-frontend/Dockerfile .'      
-		    //}
-		//}
         	stage ('docker image push to Nexus') {
 		    steps {
 			withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
