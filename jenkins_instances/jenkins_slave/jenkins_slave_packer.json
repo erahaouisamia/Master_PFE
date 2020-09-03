@@ -6,27 +6,28 @@
   
   "builders": 
   [
-    {
+  {
     "type": "amazon-ebs",
     "access_key": "{{user `aws_access_key`}}",
     "secret_key": "{{user `aws_secret_key`}}",
     "region": "eu-west-2",
     "source_ami": "ami-006a0174c6c25ac06",
-    "instance_type": "t2.medium",
+    "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
     "ssh_keypair_name": "keypair_aws",
-    "ssh_private_key_file": "aws/Packer_terraform/keypair_aws.pem",
-    "ami_name": "jenkins-image-Packer"
+    "ssh_private_key_file": "jenkins_instances/keypair_aws.pem",
+    "ami_name": "Jenkin-slave-image-Packer"
   }
   ],
   "provisioners":[
     {
-     "type":"shell",
-     "script": "aws/Packer_terraform/jenkins/setup.sh" 
-  },
+       "type":"shell",
+       "script": "jenkins_instances/jenkins_slave/setup.sh"
+    },
     {
-     "type":"ansible-local",
-     "playbook_file": "aws/Packer_terraform/jenkins/install_nexus_jenkins.yaml"
+       "type":"ansible-local",
+       "playbook_file": "jenkins_instances/jenkins_slave/install_docker.yaml",
+       "extra_arguments": ["--extra-vars", "ansible_python_interpreter='/usr/bin/python3'"]
   }
   ]
 }

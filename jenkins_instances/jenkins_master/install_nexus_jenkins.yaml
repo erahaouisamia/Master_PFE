@@ -74,11 +74,14 @@
       group: 1000
       path: /share/jenkins
 
+  - name: Which docker
+    shell: which docker
+    register: docker_exec
+
   - name: Create a container from the jenkins docker image
     docker_container:
       name: "jenkins"
       image: "jenkins/jenkins"
-      user: root
       restart_policy: on-failure
       ports:
         - "8080:8080"
@@ -89,20 +92,31 @@
       volumes:
           - "/share/jenkins:/var/jenkins_home"
           - "/var/run/docker.sock:/var/run/docker.sock"
-    command: "{{ item }}"
-    with_items:
-      - docker exec -it --user="root" jenkins curl -sSL https://get.docker.com/ -o get-docker.sh
-      - docker exec -it --user="root" jenkins sh get-docker.sh
-      - docker exec -it --user="root" jenkins usermod -aG docker jenkins
+          - "{{docker_exec.stdout}}:/usr/bin/docker"
     
   - name: Copy systemd service script to start and stop the jenkins container
-    copy: src=files/jenkins.service dest=/etc/systemd/system
+    copy: 
+      remote_src: yes
+      src: /tmp/jenkins.service 
+      dest: /etc/systemd/system
 
-  - name: Reload systemctl
-    shell: systemctl reload-or-restart docker-jenkins
+  - name: Copy systemd service script to start and stop the nexus container
+    copy: 
+      remote_src: yes
+      src: /tmp/nexus.service 
+      dest: /etc/systemd/system
+
+  - name: Reload systemctl (jenkins)
+    shell: systemctl reload-or-restart jenkins
+
+  - name: Reload systemctl (nexus)
+    shell: systemctl reload-or-restart nexus
 
   - name: Enable the docker-jenkins service
-    shell: systemctl enable docker-jenkins
+    shell: systemctl enable jenkins
+
+  - name: Enable the docker-nexus service
+    shell: systemctl enable nexus
 
   handlers:
       - name: docker status
