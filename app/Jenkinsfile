@@ -14,11 +14,6 @@ pipeline {
     	//}
 
 	stages {
-		stage('Git Checkout'){
-            		steps{
-		    		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
-	    		}
-        	}
         	stage('Backend') {
 			agent{
 				docker{
@@ -27,6 +22,11 @@ pipeline {
 				}
 			}
 			stages{
+				stage('Git Checkout'){
+					steps{
+						checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
+					}
+        			}
 				stage('Compile'){
 					steps {
 						dir("${env.WORKSPACE}/app/crud-api")
