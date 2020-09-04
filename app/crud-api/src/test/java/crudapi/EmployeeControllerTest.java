@@ -26,11 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import crudapi.Employee;
 import crudapi.Springboot2JpaCrudExampleApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication(exclude = {
-  DataSourceAutoConfiguration.class
-})
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Springboot2JpaCrudExampleApplication.class)
 @AutoConfigureMockMvc
