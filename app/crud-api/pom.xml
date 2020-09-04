@@ -8,10 +8,10 @@
 		<version>2.2.5.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>net.guides.springboot2</groupId>
-	<artifactId>springboot2-jpa-crud-example</artifactId>
+	<groupId>crudapi</groupId>
+	<artifactId>crud-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>springboot2-jpa-crud-example</name>
+	<name>crud-api</name>
 	<description>Rest API for a Simple Employee Management Application</description>
 
 	<properties>
