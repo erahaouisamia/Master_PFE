@@ -48,6 +48,9 @@ public class EmployeeControllerTest {
 		return objectMapper.readValue(json, classe);
 	}
 	@Test
+	public void contextLoads() {
+	 }
+	@Test
 	public void getAllEmployeesTest() throws Exception {
 		 MvcResult mvcResult = mvc.perform(get("/api/v1/employees")
 			      .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
