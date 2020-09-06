@@ -2,7 +2,6 @@ package crudapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,9 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,11 +22,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import crudapi.Employee;
-import crudapi.Springboot2JpaCrudExampleApplication;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Springboot2JpaCrudExampleApplication.class)
-@AutoConfigureMockMvc
+@WebMvcTest(EmployeeController.class)
 public class EmployeeControllerTest {
 	//@Autowired
 	//private EmployeeController empCont;
@@ -64,7 +59,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void getEmployeeByIdTest() throws Exception {
-		Long id = new Long(4);
+		Long id = new Long(1);
 		MvcResult mvcResult = mvc.perform(get("/api/v1/employees/{id}",id)
 			      .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 			   
@@ -93,7 +88,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void updateEmployeeTest() throws Exception {
-		Long id = new Long(4);
+		Long id = new Long(2);
 		Employee e1 = new Employee("Samia", "ER", "samiaerahaoui@gmail.com");
 		e1.setLastName("ERAHAOUI");
 		String jsonStr = ObjToJson(e1);
@@ -109,7 +104,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void deleteEmployeeTest() throws Exception {
-		Long id = new Long(14);
+		Long id = new Long(1);
 	    MvcResult mvcResult = mvc.perform(delete("/api/v1/employees/{id}",id)).andReturn();
 	    int status = mvcResult.getResponse().getStatus();
 	    assertEquals(200, status,"Not working");
