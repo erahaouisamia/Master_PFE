@@ -47,6 +47,24 @@
       name: ubuntu
       group: docker
 
+  - name: Create a container from the terraform docker image
+    docker_container:
+      name: "terraform"
+      image: "hashicorp/terraform"
+      restart_policy: on-failure
+
+  - name: Create a container from the packer docker image
+    docker_container:
+      name: "packer"
+      image: "hashicorp/packer"
+      restart_policy: on-failure
+
+  - name: Create a container from the packer docker image
+    docker_container:
+      name: "git"
+      image: "bitnami/git"
+      restart_policy: on-failure
+
   handlers:
       - name: docker status
         service: name=docker state=started

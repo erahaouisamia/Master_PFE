@@ -1,9 +1,0 @@
-config:
-  backend_uri: "employees-app.tk/api/employees"
-image:
-  repository: 52.254.19.67:5000/frontend
-  tag: "latest"
-replicaCount: 1
-service:
-  type: NodePort
-  port: 80
