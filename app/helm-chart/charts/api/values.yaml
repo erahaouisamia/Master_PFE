@@ -1,11 +1,7 @@
-secret:
-  database_uri:
-    dbip:
-    username: postgres
-    password:
-    dbport: 5432
-    dbname: db_example
-    dbconn: ?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
+backend:
+  secret:
+    database_uri:
+      dbip:
 
 image:
   repository: 192.168.1.15:8083/springboot2-jpa-crud-example
