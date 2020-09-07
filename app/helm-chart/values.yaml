@@ -8,17 +8,13 @@ RegSec: prvrg
 #jdbc:mysql://crudapp-mysql:3306/db_example?allowPublicKeyRetrieval=TRUE&useSSL=false&serverTimezone=UTC
 
 image:
-  repository: 52.254.19.67:5000/frontend
+  repository: 192.168.1.11:8083/angular_client
   tag: "latest"
 replicaCount: 1
 service:
   #type: NodePort
   port: 80
-  
-backend:
-  secret:
-    database_uri:
-      dbip:
+
 ingress:
   hosts:
     - host:
