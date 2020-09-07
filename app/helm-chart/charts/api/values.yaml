@@ -1,0 +1,16 @@
+secret:
+  database_uri:
+    dbip:
+    username: postgres
+    password:
+    dbport: 5432
+    dbname: db_example
+    dbconn: ?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
+
+image:
+  repository: adresse_machine_nexus/backend
+  tag: "0.0.2"
+replicaCount: 1
+service:
+  type: ClusterIP
+  port: 8090
