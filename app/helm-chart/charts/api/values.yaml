@@ -8,8 +8,8 @@ secret:
     dbconn: ?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
 
 image:
-  repository: adresse_machine_nexus/backend
-  tag: "0.0.2"
+  repository: 192.168.1.15:8083/springboot2-jpa-crud-example
+  tag: "lates"
 replicaCount: 1
 service:
   type: ClusterIP
