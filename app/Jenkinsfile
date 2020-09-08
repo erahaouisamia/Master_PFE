@@ -44,7 +44,7 @@ pipeline {
 		{
 			steps {
 				dir("${env.WORKSPACE}/app/crud-api"){
-					sh 'ls ./target'
+					sh 'ls target'
 					sh 'docker build -t backend:v1 -f Dockerfile .'
 				}
 			}
