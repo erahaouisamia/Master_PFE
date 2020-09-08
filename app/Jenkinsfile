@@ -40,7 +40,7 @@ pipeline {
 			steps {
 				dir("${env.WORKSPACE}/app/crud-frontend")
 				{
-					withDockerContainer(image: 'node:latest')
+					withDockerContainer(image: 'node:latest'){
 						sh 'npm install'
 						sh 'npm run build -- --prod' 
 					}
