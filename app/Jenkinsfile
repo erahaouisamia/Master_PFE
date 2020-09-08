@@ -40,6 +40,14 @@ pipeline {
 				}
 			}
 		}
+		stage ('docker image build api')
+		{
+			steps {
+				dir("${env.WORKSPACE}/app/crud-api"){
+					sh 'docker build -t backend:v1 .'
+				}
+			}
+		}
 		stage('Frontend'){
 			agent {
 				docker { image 'node:latest' }
@@ -61,14 +69,6 @@ pipeline {
 							sh 'npm run build -- --prod' 
 						}
 					}
-				}
-			}
-		}
-		stage ('docker image build api')
-		{
-			steps {
-				dir("${env.WORKSPACE}/app/crud-api"){
-					sh 'docker build -t backend:v1 .'
 				}
 			}
 		}
