@@ -12,6 +12,7 @@ pipeline {
 	stages {
 		stage('Git Checkout'){
 			steps{
+				cleanWs()
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
 			}
         	}
@@ -66,7 +67,7 @@ pipeline {
 			}
 		    }
 		}
-		stage ('docker image build api'){
+		stage ('docker image build frontend'){
 			steps {
 				dir("${env.WORKSPACE}/app/crud-frontend"){
 					sh 'docker build -t frontend:v1 .' 
