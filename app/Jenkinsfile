@@ -38,6 +38,14 @@ pipeline {
 						}
 					}
 				}
+				stage ('docker image build api')
+				{
+				    steps {
+					dir("${env.WORKSPACE}/app/crud-api"){
+						sh 'docker build -t backend:v1 .'
+					}
+				    }
+		}
 			}
 		}
 		stage('Frontend'){
@@ -62,20 +70,12 @@ pipeline {
 						}
 					}
 				}
-			}
-		}
-		stage ('docker image build api')
-		{
-		    steps {
-			dir("${env.WORKSPACE}/app/crud-api"){
-				sh 'docker build -t backend:v1 .'
-			}
-		    }
-		}
-		stage ('docker image build frontend'){
-			steps {
-				dir("${env.WORKSPACE}/app/crud-frontend"){
-					sh 'docker build -t frontend:v1 .' 
+				stage ('docker image build frontend'){
+					steps {
+						dir("${env.WORKSPACE}/app/crud-frontend"){
+							sh 'docker build -t frontend:v1 .' 
+						}
+					}
 				}
 			}
 		}
