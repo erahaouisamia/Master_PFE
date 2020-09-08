@@ -37,7 +37,7 @@
 		<dependency>
 		    <groupId>postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
-		    <version>9.4.1212</version>
+		    <version>9.1-901-1.jdbc4</version>
 		</dependency>
 		
 		<dependency>
@@ -60,13 +60,13 @@
 		        <version>1.4.13</version>
 		        <executions>
 		        	<execution>
-			        <id>default</id>
-			        <phase>install</phase>
-			        <goals>
-				        <goal>build</goal>
-				        <goal>push</goal>
-		            </goals>
-		                    </execution>
+					<id>default</id>
+					<phase>install</phase>
+					<goals>
+						<goal>build</goal>
+						<goal>push</goal>
+					</goals>
+		                </execution>
 		          </executions>
 		          <configuration>
 		          	<repository>3.9.82.208:8083/${project.artifactId}</repository>
