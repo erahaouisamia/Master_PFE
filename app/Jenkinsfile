@@ -16,7 +16,7 @@ pipeline {
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
 			}
         	}
-		stage('Compile && build jar'){
+		stage('Compile && build jar && docker image'){
 			steps {
 				dir("${env.WORKSPACE}/app/crud-api"){
 					withDockerContainer(image: 'maven:3.6.3-openjdk-8')
@@ -24,33 +24,19 @@ pipeline {
 						sh label: '', script: 'mvn clean compile'
 						sh 'mvn clean package'
 					}
-				}
-			}
-		}
-		stage ('docker image build api')
-		{
-			steps {
-				dir("${env.WORKSPACE}/app/crud-api"){
-					sh 'ls target'
 					sh 'docker build -t backend:v1 .'
 				}
 			}
 		}
-		stage('Frontend'){
+		stage('Frontend && docker image'){
 			steps {
 				dir("${env.WORKSPACE}/app/crud-frontend")
 				{
 					withDockerContainer(image: 'node:latest'){
-						sh 'npm install'
+						//sh 'npm install'
 						sh 'npm run build -- --prod' 
 					}
-				}
-			}
-		}
-		stage ('docker image build frontend'){
-			steps {
-				dir("${env.WORKSPACE}/app/crud-frontend"){
-					sh 'docker build -t frontend:v1 .' 
+					sh 'docker build -t frontend:v1 .'
 				}
 			}
 		}
