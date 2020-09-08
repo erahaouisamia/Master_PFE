@@ -9,10 +9,6 @@ pipeline {
 		//cron('30 23 * * *') //run at 23:30:00 
     	}
 
-	//environment {
-    		//JAVA_TOOL_OPTIONS = "-Duser.home=/var/maven"
-    	//}
-
 	stages {
 		stage('Git Checkout'){
 			steps{
@@ -23,7 +19,6 @@ pipeline {
 			agent{
 				docker{
 					image 'maven:3.6.3-openjdk-8'
-					//args "-v ~/.m2:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2"
 				}
 			}
 			stages{
@@ -42,6 +37,7 @@ pipeline {
 						}
 					}
 				}
+			}
 		}
 		stage('Frontend'){
 			agent {
@@ -70,20 +66,20 @@ pipeline {
 			}
 		    }
 		}
-		stage ('docker image build api')
-			{
-			    steps {
+		stage ('docker image build api'){
+			steps {
 				dir("${env.WORKSPACE}/app/crud-frontend"){
 					sh 'docker build -t frontend:v1 .' 
 				}
-			    }
 			}
+		}
         	stage ('docker image push to Nexus') {
 		    steps {
-			withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
+			withCredentials(usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')){
 				sh 'docker login -u \$nexus_user -p \$nexus_password http://3.9.82.208:8083'
 				sh 'docker push backend:v1'
-				sh 'docker push frontend:v1'                        
+				sh 'docker push frontend:v1'
+			}
 		    }
         	}
 		stage ('helm push to Nexus') {
@@ -98,6 +94,7 @@ pipeline {
 					sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
 					sh 'helm repo add helmRepo http://http://3.9.82.208:8081/repository/helmRepo/ --username \$nexus_user --password \$nexus_password'
 					sh 'helm nexus-push helmRepo app/Helm-chart --username \$nexus_user --password \$nexus_password'
+				}
 		    	}
         	}
     	}
