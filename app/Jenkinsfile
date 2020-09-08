@@ -16,59 +16,35 @@ pipeline {
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
 			}
         	}
-        	stage('Backend') {
-			agent{
-				docker{
-					image 'maven:3.6.3-openjdk-8'
-				}
-			}
-			stages{
-				stage('Compile'){
-					steps {
-						dir("${env.WORKSPACE}/app/crud-api")
+		stage('Compile && build jar'){
+			steps {
+				dir("${env.WORKSPACE}/app/crud-api"){
+					withDockerContainer(image: 'maven:3.6.3-openjdk-8')
 						{
 							sh label: '', script: 'mvn clean compile'
-			    			}
-					}
-				}
-				stage('build jar'){
-					steps{
-						dir("${env.WORKSPACE}/app/crud-api"){
 							sh 'mvn clean package'
 						}
-					}
 				}
 			}
+		}
+
 		}
 		stage ('docker image build api')
 		{
 			steps {
 				dir("${env.WORKSPACE}/app/crud-api"){
 					sh 'ls target'
-					sh 'docker build -t backend:v1 -f Dockerfile .'
+					sh 'docker build -t backend:v1 .'
 				}
 			}
 		}
 		stage('Frontend'){
-			agent {
-				docker { image 'node:latest' }
-			}
-			stages {
-				//verifier l'installation de npm
-				stage('Install') {
-					steps {
-						dir("${env.WORKSPACE}/app/crud-frontend")
-						{
-							sh 'npm install'
-						}
-					}
-				}
-				stage('Build') {
-					steps { 
-						dir("${env.WORKSPACE}/app/crud-frontend")
-						{
-							sh 'npm run build -- --prod' 
-						}
+			steps {
+				dir("${env.WORKSPACE}/app/crud-frontend")
+				{
+					withDockerContainer(image: 'node:latest')
+						sh 'npm install'
+						sh 'npm run build -- --prod' 
 					}
 				}
 			}
@@ -90,20 +66,18 @@ pipeline {
 		    }
         	}
 		stage ('helm push to Nexus') {
-			agent{
-				docker{
-					image 'alpine/helm'
-					args "--entrypoint="
-				}
+			steps {
+				dir("${env.WORKSPACE}/app"){
+					withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
+						withDockerContainer(args: '--entrypoint=', image: 'alpine/helm'){
+							sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
+							sh 'helm repo add helmRepo http://http://3.9.82.208:8081/repository/helmRepo/ --username \$nexus_user --password \$nexus_password'
+							sh 'helm nexus-push helmRepo app/Helm-chart --username \$nexus_user --password \$nexus_password'
+						}
+		    			}
+        			}
 			}
-		    	steps {           
-				withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
-					sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
-					sh 'helm repo add helmRepo http://http://3.9.82.208:8081/repository/helmRepo/ --username \$nexus_user --password \$nexus_password'
-					sh 'helm nexus-push helmRepo app/Helm-chart --username \$nexus_user --password \$nexus_password'
-				}
-		    	}
-        	}
+		}
     	}
 	post {
 	    success {
