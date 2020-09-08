@@ -47,9 +47,11 @@ pipeline {
 			stages {
 				//verifier l'installation de npm
 				stage('Install') {
-					steps { 
-						sh 'npm install'
-						sh 'npm start'
+					steps {
+						dir("${env.WORKSPACE}/app/crud-frontend")
+						{
+							sh 'npm install'
+						}
 					}
 				}
 				stage('Build') {
