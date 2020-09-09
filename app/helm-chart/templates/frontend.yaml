@@ -30,7 +30,7 @@ metadata:
   labels: 
     {{- include "crud.labels" . | nindent 4 }}
 spec:
-  type: LoadBalancer               
+  type: {{ .Values.service.type }}               
   selector:
     {{- include "crud.selectorLabels" . | nindent 6 }}
   ports:                      
