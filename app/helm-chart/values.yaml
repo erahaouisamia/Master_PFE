@@ -16,5 +16,4 @@ ingress:
   hosts:
     - host:
         domain: crudemployee.com
-        chart: frontend
         port: 80
