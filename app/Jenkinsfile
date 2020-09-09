@@ -49,7 +49,7 @@ pipeline {
 				dir("${env.WORKSPACE}/app/crud-api"){
 					sh 'docker build -t backend:v1 .'
 				}
-				dir("${env.WORKSPACE}/app/frontend"){
+				dir("${env.WORKSPACE}/app/crud-frontend"){
 					sh 'docker build -t frontend:v1 .'
 				}
 			}
