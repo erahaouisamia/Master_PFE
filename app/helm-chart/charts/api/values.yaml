@@ -1,11 +1,16 @@
-backend:
-  secret:
-    database_uri:
-      dbip:
+secret:
+  database_uri:
+    dbip:
+    username: postgres
+    password: postgres
+    dbport: 5432
+    dbname: employeedb
+    dbconn: ?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
+     
 
 image:
-  repository: 192.168.1.15:8083/springboot2-jpa-crud-example
-  tag: "lates"
+  repository: 3.10.94.103:8083/backend
+  tag: "v1"
 replicaCount: 1
 service:
   type: ClusterIP
