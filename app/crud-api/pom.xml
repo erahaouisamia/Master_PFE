@@ -69,7 +69,7 @@
 		                </execution>
 		          </executions>
 		          <configuration>
-		          	<repository>3.9.82.208:8083/${project.artifactId}</repository>
+		          	<repository>172.31.16.10:8083/${project.artifactId}</repository>
 		            	<tag>${project.version}</tag>
 		                <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
 		                 <buildArgs>
