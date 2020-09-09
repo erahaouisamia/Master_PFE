@@ -15,6 +15,6 @@ spec:
       paths:
       - path: /*
         backend:
-          serviceName: {{ $.Release.Name}}-{{ .host.chart }}
+          serviceName: {{ include "crud.fullname" $ }}
           servicePort: {{ .host.port }}
 {{- end }}
