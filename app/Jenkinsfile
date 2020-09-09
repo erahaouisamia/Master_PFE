@@ -57,7 +57,7 @@ pipeline {
         	stage ('docker image push to Nexus') {
 		    steps {
 			withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
-				sh 'docker login -u \$nexus_user -p \$nexus_password http://18.133.16.112:8083'
+				sh 'docker login -u \$nexus_user -p \$nexus_password 18.133.16.112:8083'
 				sh 'docker push backend:v1'
 				sh 'docker push frontend:v1'
 			}
