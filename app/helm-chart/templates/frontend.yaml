@@ -15,7 +15,7 @@ spec:
         {{- include "crud.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-        - name: {{ .Values.RegSec }}
+        - name: {{ .Values.global.RegSec }}
       containers:
         - name: frontend
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
