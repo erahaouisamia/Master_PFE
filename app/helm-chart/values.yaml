@@ -3,7 +3,6 @@
 # Declare variables to be passed into your templates.
 
 RegSec: prvrg
-
 image:
   repository: 3.10.94.103:8083/frontend
   tag: "v1"
