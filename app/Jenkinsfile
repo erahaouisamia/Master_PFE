@@ -20,11 +20,15 @@ pipeline {
 						sh label: '', script: 'mvn clean compile'
 						sh 'mvn clean package'
 					}
-					sh 'docker build -t backend:v1 .'
 				}
 			}
+			post {
+			    success {
+			      sh 'docker rm -f maven:3.6.3-openjdk-8'
+			    }
+          		}
 		}
-		stage('Frontend && docker image'){
+		stage('Frontend'){
 			steps {
 				dir("${env.WORKSPACE}/app/crud-frontend")
 				{
@@ -32,13 +36,27 @@ pipeline {
 						sh 'npm install'
 						sh 'npm run build -- --prod' 
 					}
+				}
+			}
+			post {
+			    success {
+			      sh 'docker rm -f node:latest'
+			    }
+          		}
+		}
+		stage('build docker images'){
+			steps{
+				dir("${env.WORKSPACE}/app/crud-api"){
+					sh 'docker build -t backend:v1 .'
+				}
+				dir("${env.WORKSPACE}/app/frontend"){
 					sh 'docker build -t frontend:v1 .'
 				}
 			}
 		}
         	stage ('docker image push to Nexus') {
 		    steps {
-			withCredentials(usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')){
+			withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
 				sh 'docker login -u \$nexus_user -p \$nexus_password http://3.9.82.208:8083'
 				sh 'docker push backend:v1'
 				sh 'docker push frontend:v1'
@@ -57,6 +75,11 @@ pipeline {
 		    			}
         			}
 			}
+			post {
+			    success {
+			      sh 'docker rm -f alpine/helm'
+			    }
+          		}
 		}
     	}
 	post {
