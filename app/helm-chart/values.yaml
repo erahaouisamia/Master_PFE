@@ -3,16 +3,13 @@
 # Declare variables to be passed into your templates.
 
 RegSec: prvrg
-#ApiImg: 192.168.1.11:8083/springboot2-jpa-crud-example:latest
-#feImg: 192.168.1.11:8083/angular_client:latest
-#jdbc:mysql://crudapp-mysql:3306/db_example?allowPublicKeyRetrieval=TRUE&useSSL=false&serverTimezone=UTC
 
 image:
-  repository: 192.168.1.11:8083/angular_client
-  tag: "latest"
+  repository: 3.10.94.103:8083/frontend
+  tag: "v1"
 replicaCount: 1
 service:
-  #type: NodePort
+  type: NodePort
   port: 80
 
 ingress:
