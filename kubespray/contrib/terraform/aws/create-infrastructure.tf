@@ -51,10 +51,36 @@ module "aws-elb" {
 *
 */
 
+data "aws_ami" "aws-db" {
+
+  most_recent = true
+  owners      = ["self"]
+
+  filter {
+    name   = "name"
+    values = ["aws-postgress_db-image*"]
+
+
+  }
+}
+
+
+resource "aws_instance" "db" {
+  
+    ami = data.aws_ami.aws-db.id
+    instance_type = var.aws_bastion_size
+    key_name = var.AWS_SSH_KEY_NAME
+    availability_zone           = element(slice(data.aws_availability_zones.available.names, 0, 2), 0)
+    subnet_id = element(module.aws-vpc.aws_subnet_ids_private, 0)
+    vpc_security_group_ids =  module.aws-vpc.aws_security_group
+    associate_public_ip_address = false
+
+
+}
+
 resource "aws_instance" "bastion-server" {
   ami                         = "ami-006a0174c6c25ac06"
   instance_type               = var.aws_bastion_size
- # count                       = length(var.aws_cidr_subnets_public)
   count                       = var.aws_kube_master_num
   associate_public_ip_address = true
   availability_zone           = element(slice(data.aws_availability_zones.available.names, 0, 2), count.index)
