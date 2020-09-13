@@ -209,7 +209,7 @@ resource "null_resource" "inventories" {
     command = "echo '${data.template_file.inventory.rendered}' > ${var.inventory_file}"
   }
     provisioner "local-exec" {
-    command = "echo --- '\n' endpoint: ${aws_instance.db.private_ip} > ${var.custom_var_file}"
+    command = "echo --- '\n' endpoint: ${aws_instance.db.private_ip} > ${var.db_var_file}"
 }
   triggers = {
     template = data.template_file.inventory.rendered
