@@ -15,7 +15,7 @@ spec:
         {{- include "crud.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-        - name: {{ .Values.RegSec }}
+        - name: {{ .Values.global.RegSec }}
       containers:
         - name: frontend
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -30,7 +30,7 @@ metadata:
   labels: 
     {{- include "crud.labels" . | nindent 4 }}
 spec:
-  type: LoadBalancer               
+  type: {{ .Values.service.type }}               
   selector:
     {{- include "crud.selectorLabels" . | nindent 6 }}
   ports:                      

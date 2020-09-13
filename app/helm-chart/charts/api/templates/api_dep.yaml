@@ -15,7 +15,7 @@ spec:
         {{- include "api.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-        - name: {{ .Values.RegSec }}
+        - name: {{ .Values.global.RegSec }}
       containers:
         - name: backend
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
