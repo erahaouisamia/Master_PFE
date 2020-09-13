@@ -33,3 +33,4 @@ default_tags = {
 }
 
 inventory_file = "../../../inventory/hosts"
+db_var_file ="../../../database.yml"
