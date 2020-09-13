@@ -51,7 +51,7 @@ module "aws-elb" {
 *
 */
 
-data "aws_ami" "aws-db" {
+data "aws_ami" "db-packer" {
 
   most_recent = true
   owners      = ["self"]
@@ -67,7 +67,7 @@ data "aws_ami" "aws-db" {
 
 resource "aws_instance" "db" {
   
-    ami = data.aws_ami.aws-db.id
+    ami = data.aws_ami.db-packer.id
     instance_type = var.aws_bastion_size
     key_name = var.AWS_SSH_KEY_NAME
     availability_zone           = element(slice(data.aws_availability_zones.available.names, 0, 2), 0)
