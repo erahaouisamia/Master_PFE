@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 0.12.0"
 }
 
-variable "custom_var_file" {}
+variable "db_var_file" {}
 
 provider "aws" {
  # access_key = var.AWS_ACCESS_KEY_ID
