@@ -2,6 +2,8 @@ terraform {
   required_version = ">= 0.12.0"
 }
 
+variable "db_var_file" {}
+
 provider "aws" {
   access_key = var.AWS_ACCESS_KEY_ID
   secret_key = var.AWS_SECRET_ACCESS_KEY
@@ -43,6 +45,37 @@ module "aws-iam" {
 
   aws_cluster_name = var.aws_cluster_name
 }
+
+/*
+ * Create db Instance
+  **/
+data "aws_ami" "db-packer" {
+
+  most_recent = true
+  owners      = ["self"]
+
+  filter {
+    name   = "name"
+    values = ["bd-image*"]
+
+
+  }
+}
+
+
+resource "aws_instance" "db" {
+    
+#    count                       = length(var.aws_cidr_subnets_public)
+    ami = data.aws_ami.db-packer.id
+    instance_type = var.aws_bastion_size
+    key_name = var.AWS_SSH_KEY_NAME
+    availability_zone           = element(slice(data.aws_availability_zones.available.names, 0, 2), 0)
+    subnet_id = element(module.aws-vpc.aws_subnet_ids_private, 0)
+    vpc_security_group_ids =  module.aws-vpc.aws_security_group
+    associate_public_ip_address = false
+
+
+} 
 
 /*
 * Create Bastion Instances in AWS
@@ -164,6 +197,8 @@ resource "null_resource" "inventories" {
   provisioner "local-exec" {
     command = "echo '${data.template_file.inventory.rendered}' > ${var.inventory_file}"
   }
+  provisioner "local-exec" {
+    command = "echo --- '\n' endpoint: ${aws_instance.db.private_ip} > ${var.db_var_file}"
 
   triggers = {
     template = data.template_file.inventory.rendered
