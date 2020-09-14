@@ -199,7 +199,7 @@ resource "null_resource" "inventories" {
   }
   provisioner "local-exec" {
     command = "echo --- '\n' endpoint: ${aws_instance.db.private_ip} > ${var.db_var_file}"
-
+  }
   triggers = {
     template = data.template_file.inventory.rendered
   }
