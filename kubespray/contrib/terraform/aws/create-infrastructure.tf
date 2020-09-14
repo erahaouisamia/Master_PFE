@@ -73,7 +73,9 @@ resource "aws_instance" "db" {
     subnet_id = element(module.aws-vpc.aws_subnet_ids_private, 0)
     vpc_security_group_ids =  module.aws-vpc.aws_security_group
     associate_public_ip_address = false
-
+    tags = {
+      Name            = "database-host"
+    }
 
 } 
 
