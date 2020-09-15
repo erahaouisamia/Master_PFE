@@ -58,7 +58,7 @@ pipeline {
 		    steps {
 			withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
 			//withDockerRegistry(credentialsId: 'nexus-registry', url: 'http://172.17.0.2:8083') {
-				sh 'docker login -u \$nexus_user -p \$nexus_password repos.nexus.com:48083'
+				sh 'docker login -u \$nexus_user -p \$nexus_password https://repos.nexus.com:48083'
 				sh 'docker push backend:\${BUILD_NUMBER}'
 				sh 'docker push frontend:\${BUILD_NUMBER}'
 			}
