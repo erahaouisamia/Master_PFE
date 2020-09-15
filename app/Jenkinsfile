@@ -33,8 +33,9 @@ pipeline {
 				dir("${env.WORKSPACE}/app/crud-frontend")
 				{
 					withDockerContainer(image: 'node:latest'){
+						sh 'rm package-lock.json
 						sh 'npm install'
-						sh 'npm run build -- --debug --prod' 
+						sh 'npm run build -- --prod' 
 					}
 				}
 			}
