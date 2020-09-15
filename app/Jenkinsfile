@@ -70,12 +70,12 @@ pipeline {
 			steps {
 				dir("${env.WORKSPACE}/app"){
 					withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
-						withDockerContainer(args:'--user="root" --entrypoint=""', image: 'alpine/helm'){
-							sh 'apk add git'
-							sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
-							sh 'helm repo add helmRepo https://repos.nexus.com:80/repository/helmRepo/ --username \$nexus_user --password \$nexus_password'
-							sh 'helm nexus-push helmRepo app/Helm-chart --username \$nexus_user --password \$nexus_password'
-						}
+						//withDockerContainer(args:'--user="root" --entrypoint=""', image: 'alpine/helm'){
+						sh 'docker run -it --entrypoint='' alpine/helm sh -c "apk add git &&helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git && helm repo add helmRepo https://repos.nexus.com:80/repository/helmRepo/ --username \$nexus_user --password \$nexus_password && helm nexus-push helmRepo app/Helm-chart"'
+							//sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
+							//sh 'helm repo add helmRepo https://repos.nexus.com:80/repository/helmRepo/ --username \$nexus_user --password \$nexus_password'
+							//sh 'helm nexus-push helmRepo app/Helm-chart --username \$nexus_user --password \$nexus_password'
+						//}
 		    			}
         			}
 			}
