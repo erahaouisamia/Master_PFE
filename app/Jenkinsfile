@@ -35,7 +35,6 @@ pipeline {
 					withDockerContainer(image: 'node:latest'){
 						sh 'npm install'
 						sh 'npm run build -- --prod' 
-						sh 'cat /home/node/.npm/_logs/2020-09-15T10_29_12_057Z-debug.log'
 					}
 				}
 			}
