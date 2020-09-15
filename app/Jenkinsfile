@@ -33,8 +33,8 @@ pipeline {
 				dir("${env.WORKSPACE}/app/crud-frontend")
 				{
 					withDockerContainer(image: 'node:latest'){
-						sh 'npm install --no-package-lock'
-						sh 'node_modules/@angular/cli/ng build --prod' 
+						sh 'npm install'
+						sh 'npm build-- --prod' 
 					}
 				}
 			}
