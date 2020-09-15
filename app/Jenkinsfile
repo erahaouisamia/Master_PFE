@@ -34,7 +34,7 @@ pipeline {
 				{
 					withDockerContainer(image: 'node:latest'){
 						sh 'npm install --no-package-lock'
-						sh 'ng build --prod' 
+						sh 'node_modules/@angular/cli/ng build --prod' 
 					}
 				}
 			}
