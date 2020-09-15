@@ -5,11 +5,11 @@
 global:
   RegSec: prvrg
 image:
-  repository: 3.10.94.103:8083/frontend
+  repository: repos.nexus.com:48083/frontend
   tag: "v1"
 replicaCount: 1
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 80
 
 ingress:
