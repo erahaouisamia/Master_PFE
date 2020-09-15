@@ -6,7 +6,6 @@ global:
   RegSec: prvrg
 image:
   repository: repos.nexus.com:48083/frontend
-  tag: "v1"
 replicaCount: 1
 service:
   type: LoadBalancer
