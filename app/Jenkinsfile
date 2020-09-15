@@ -34,7 +34,7 @@ pipeline {
 				{
 					withDockerContainer(image: 'node:latest'){
 						sh 'npm install'
-						sh 'npm run build -- --prod' 
+						sh 'npm run build -- --debug --prod' 
 					}
 				}
 			}
