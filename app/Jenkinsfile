@@ -78,7 +78,7 @@ pipeline {
 				    		sh 'chmod 700 ./get_helm.sh'
 	                			sh './get_helm.sh'
 						sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
-						sh 'helm repo add helmRepo https://repos.nexus.com:8082/repository/helmRepo/ --username \$nexus_user --password \$nexus_password --insecure-skip-tls-verify'
+						sh 'helm repo add helmRepo https://repos.nexus.com:8082/repository/helmRepo --username \$nexus_user --password \$nexus_password --insecure-skip-tls-verify'
 						sh 'helm nexus-push helmRepo ./Helm-chart --username \$nexus_user --password \$nexus_password'
 						//}
 		    			}
