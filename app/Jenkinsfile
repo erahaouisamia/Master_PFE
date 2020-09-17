@@ -80,7 +80,7 @@ pipeline {
 			}
 			post {
 			    success {
-				    sh 'docker image rm -f alpine/helm'
+				    sh 'docker image rm -f dtzar/helm-kubectl'
 			    }
           		}
 		}
