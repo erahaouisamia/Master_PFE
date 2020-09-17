@@ -69,28 +69,19 @@ pipeline {
 		stage ('helm push to Nexus') {
 			steps {
 				dir("${env.WORKSPACE}/app"){
-						//withDockerContainer(args:'--user="root" --entrypoint=""', image: 'alpine/helm'){
-							//sh 'apk add git'
-						//sh 'helm plugin uninstall nexus-push'
-						//sh 'sudo rm -rf /usr/local/bin/helm'
-						sh 'curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3'
-				    		sh 'chmod 700 ./get_helm.sh'
-	                			sh './get_helm.sh'
-						sh 'helm repo update'
-						sh 'helm install crud ./Helm-chart'
-						sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
+					withDockerContainer(args:'--user="root" --entrypoint=""', image: 'alpine/helm'){
+						sh 'apk add git'
 						withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
-							sh 'helm repo add helmRepo https://repos.nexus.com:8082/repository/helmRepo --username \$nexus_user --password \$nexus_password --insecure-skip-tls-verify'
-							sh 'helm nexus-push helmRepo app/Helm-chart --username \$nexus_user --password \$nexus_password'
-						//}
-		    				}
+							sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
+							sh 'helm repo add helmRepo http//172.31.16.10:8081/repository/helmRepo/ --username \$nexus_user --password \$nexus_password'
+							sh 'helm nexus-push helmRepo Helm-chart/ --username \$nexus_user --password \$nexus_password'
+						}
+		    			}
         			}
 			}
 			post {
 			    success {
-			      //sh 'docker image rm -f alpine/helm'
-				    sh 'helm plugin uninstall nexus-push'
- 				    sh 'sudo rm -rf /usr/local/bin/helm'
+				    sh 'docker image rm -f alpine/helm'
 			    }
           		}
 		}
