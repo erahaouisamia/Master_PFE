@@ -1,0 +1,78 @@
+pipeline {
+  agent{
+    node{
+      label 'slave'
+    }
+  }
+  stages {
+    stage("Git Checkout"){
+      steps{
+        cleanWs()
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'kubespray']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
+      }
+    }
+    stage('terraform'){
+      steps{
+        dir("${env.WORKSPACE}/kubespray/contrib/terraform/aws"){
+          withDockerContainer(args: '--entrypoint=',image: 'hashicorp/terraform') {
+              sh 'terraform init'
+              sh 'terraform plan -out kubespray --var-file="credentials.tfvars"'
+              input(message: 'approve the plan to proceed and apply', ok: 'Yes !')
+              sh 'terraform apply "kubespray" -auto-approve'
+          }
+        }
+            dir("${env.WORKSPACE}/kubespray"){
+              withCredentials([usernamePassword(credentialsId: 'gitCred', usernameVariable: 'Github_user', passwordVariable: 'Github_pass')]){
+                sh 'git config --global user.email "samiaerahaoui.aws@gmail.com"'
+                sh 'git config --global user.name $Github_user'
+                sh 'git remote rm origin'
+                sh 'git remote add origin https://${Github_user}:${Github_pass}@github.com/erahaouisamia/repo_idemia.git > /dev/null 2>&1'
+                sh 'git add inventory/hosts contrib/terraform/aws/mysuperplan'
+                sh 'git commit -m "Added file with automated Jenikins job Terraform"'
+                sh 'git push origin master'
+              }
+            }
+          }
+          post {
+            success {
+              sh 'docker rm -f hashicorp/terraform'
+            }
+          }
+        }
+    stage('Create k8s cluster') {
+      steps{
+        withCredentials([file(credentialsId: 'private_key', variable: 'private_key'),usernamePassword(credentialsId: 'github-token', usernameVariable: 'Github_user', passwordVariable: 'Github_token'),usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
+        {
+          sh 'mkdir /home/jenkins/.ssh && chmod 700 /home/jenkins/.ssh'
+          sh 'cd ~/.ssh && cp \$private_key.pem id_rsa && chmod 600 id_rsa'
+          sh 'cd ~/.ssh && eval $(ssh-agent) && ssh-add -D && ssh-add id_rsa'
+          dir("${env.WORKSPACE}/kubespray"){
+            sh 'pip3 install -r requirements.txt'
+            sh 'ansible-playbook -i inventory/hosts cluster.yml -e ansible_user=ubuntu -e ansible_python_interpreter="/usr/bin/python3" -e nexus_username=$nexus_user -e nexus_password=$nexus_password --become-user=root --flush-cache -b'
+            //sh 'ansible-playbook deploy_app_k8s.yml -e ansible_python_interpreter="/usr/bin/python3" -e nexus_username=$nexus_user -e nexus_password=$nexus_password'
+          }
+        }
+      }
+    }
+    stage("git push"){
+      steps{
+        dir("${env.WORKSPACE}/kubespray"){
+          withCredentials([usernamePassword(credentialsId: 'gitCred', usernameVariable: 'Github_user', passwordVariable: 'Github_pass')]){
+            sh 'git config --global user.email "samiaerahaoui.aws@gmail.com"'
+            sh 'git config --global user.name $Github_user'
+            sh 'git remote rm origin'
+            sh 'git remote add origin https://${Github_user}:${Github_token}@github.com/erahaouisamia/repo_idemia.git > /dev/null 2>&1'
+            sh 'git add ssh-bastion.conf'
+            sh 'git commit -m "Added file with automated Jenikins job Terraform"'
+            sh 'git push origin master'
+          }
+        }
+      }
+    }
+  }
+  post {
+    success {
+      deleteDir()
+    }
+  }
+}
