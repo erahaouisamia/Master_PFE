@@ -1,0 +1,36 @@
+pipeline {
+	agent{
+    node{
+      label 'jenkins_slave'
+    }
+  }
+
+	stages {
+		stage("Git Checkout"){
+      steps{
+        cleanWs()
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'Database']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
+
+      }
+    }
+    stage('Build img') {
+      steps {
+         dir("${env.WORKSPACE}/Database"){
+            withDockerContainer(args: '--entrypoint=',image: 'hashicorp/packer') {
+              sh label: '', script: 'packer build packer_image.json'
+            }
+  		  }
+      }
+      post {
+        success {
+          sh 'docker rm -f hashicorp/packer'
+        }
+    }
+  }
+}
+  post {
+    success {
+      deleteDir()
+    }
+  }
+}

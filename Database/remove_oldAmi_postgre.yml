@@ -1,0 +1,131 @@
+- hosts: all
+  become: yes
+  vars_files:
+    - ./vars.yml
+  tasks:
+  - name: Install boto3 and botocore with pip3 module
+    pip:
+      name: 
+      - boto3
+      - botocore
+
+  - name: Find old images
+    ec2_ami_info:
+      owners: self
+      aws_access_key: "{{ access_key }}"
+      aws_secret_key: "{{ secret_key }}"
+      region: "{{ aws_region }}"
+      filters:
+        name: "bd-image-*"
+    register: ec2_ami
+
+  - name: sort order
+    set_fact:
+      sorted_amis: "{{ ec2_ami.images | sort(attribute='creation_date') | reverse | list }}"
+
+  - name: Deregister old amis
+    tags: always
+    ec2_ami:
+      aws_access_key: "{{ access_key }}"
+      aws_secret_key: "{{ secret_key }}"
+      region: "{{ aws_region }}"
+      image_id: "{{ item.image_id }}"
+      delete_snapshot: True
+      state: absent
+    when: index > 2   
+    loop: "{{ sorted_amis }}"
+    loop_control:
+      index_var: index
+
+  - name: Install base dependencies
+    apt:
+      name: "{{ packages }}"
+      update_cache: yes
+    vars:
+      packages:
+        - locales
+        - build-essential
+        - acl
+        - ntp
+        - htop
+        - libpq-dev
+      state: present
+      tags:
+        - packages
+  - name: Make sure psycopg2 is installed
+    pip:
+      name: psycopg2
+      executable: pip3
+      state: present
+
+  - name: Install postgresql
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+        - postgresql
+        - postgresql-contrib
+      state: present
+      tags:
+        - postgre
+
+  - name: Configure postgresql to listen on all IP interfaces
+    lineinfile:
+      path: "{{ conf_dir }}/postgresql.conf"
+      regexp: "^listen_addresses ="
+      line: "listen_addresses = '*'"
+
+  - name: postgresql should allow access to host
+    copy:
+      dest: "{{ conf_dir }}/pg_hba.conf"
+      content: |
+        local   all   all        trust
+        host    all   all        0.0.0.0/0   trust
+
+  - name: Start the Postgresql service
+    service:
+      name: postgresql
+      state: started
+      enabled: true
+
+  #- name: Create postgres user
+    #become: yes
+    #become_user: postgres
+    #become_method: sudo
+    #postgresql_user:
+      #name: "postgre"
+      #password: "postgre_user_db"
+  - name: Create postgres user
+    postgresql_user:
+      name: "{{ item.name }}"
+      password: "{{ item.password | default(omit) }}"
+      encrypted: "{{ item.encrypted | default(omit) }}"
+      priv: "{{ item.priv | default(omit) }}"
+      role_attr_flags: "{{ item.role_attr_flags | default(omit) }}"
+      db: "{{ item.db | default(omit) }}"
+    with_items: "{{ postgresql_users }}"
+    #no_log: "{{ postgres_users_no_log }}"
+    become: yes
+    become_user: "{{ postgresql_user }}"
+
+  - name: Create postgre database
+    postgresql_db:
+      name: "{{ item }}"
+      encoding: UTF-8
+    with_items: "{{ postgresql_databases }}"
+    become: yes
+    become_user: "{{ postgresql_user }}"
+
+  #- name: Ensure we have access from the new user
+    #become: yes
+    #become_user: postgres
+    #postgresql_privs:
+      #db: db_example
+      #role: postgre
+      #objs: ALL_IN_SCHEMA
+      #privs: ALL
+
+  - name: restart postgresql
+    service: 
+      name: postgresql 
+      state: restarted

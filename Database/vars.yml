@@ -1,0 +1,48 @@
+---
+access_key: "AKIAIVL6CPRLCBLIQMAA"
+secret_key: "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"
+aws_region: "eu-west-2"
+postgres_version: 10
+conf_dir: "/etc/postgresql/{{ postgres_version }}/main"
+
+# postgres_listen_addresses: *
+#postgresql_hba_entries: [{type: local, database: all, user: all, auth_method: trust},{type: host, database: all, user: all, address: 0.0.0.0/0, auth_method: trust}]
+
+postgresql_user: postgres
+
+postgresql_databases: [db_example]
+
+#   name: exampledb, # required; the rest are optional
+#   lc_collate: # defaults to 'en_US.UTF-8',
+#   lc_ctype: # defaults to 'en_US.UTF-8'
+#   encoding: # defaults to 'UTF-8',
+#   template: # defaults to 'template0',
+#   login_host: # defaults to 'localhost',
+#   login_password: # defaults to not set,
+#   login_user: # defaults to '{{ postgresql_user }}',
+#   port: # defaults to not set,
+#   owner: # defaults to postgresql_user,
+#   state: # defaults to 'present'}
+
+#postgresql_tables:
+#	- {db: "db_exapmle", name: employees}
+#columns_table: 
+#	- {name: "id", type: "int", key: "primary key"}
+#	- {name: "first_name", type: "varchar(255)"}
+#	- {name: "last_name", type: "varchar(255)"}
+#	- {name: "email_address", type: "text"}
+
+postgresql_users: []
+#  {name: jdoe, #required; the rest are optional
+#   password: # defaults to not set,
+#   encrypted: # defaults to not set,
+#   priv: # defaults to not set,
+#   role_attr_flags: # defaults to not set,
+#   db: # defaults to not set,
+#   login_host: # defaults to 'localhost',
+#   login_password: # defaults to not set,
+#   login_user: # defaults to '{{ postgresql_user }}',
+#   port: # defaults to not set,
+#   state: # defaults to 'present'},
+# Whether to output user data when managing users.
+postgres_users_no_log: false
