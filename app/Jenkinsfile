@@ -1,7 +1,7 @@
 pipeline {
 	agent{
 		node{
-			label 'master'
+			label 'slave'
 		}
 	}
 
@@ -12,7 +12,7 @@ pipeline {
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
 			}
         	}
-		stage('Compile && build jar && docker image'){
+		stage('backend'){
 			steps {
 				dir("${env.WORKSPACE}/app/crud-api"){
 					withDockerContainer(image: 'maven:3.6.3-openjdk-8')
@@ -47,38 +47,40 @@ pipeline {
 		stage('build docker images'){
 			steps{
 				dir("${env.WORKSPACE}/app/crud-api"){
-					sh 'docker build -t backend:v1 .'
+					sh 'docker build -t backend:${BUILD_NUMBER} .'
 				}
 				dir("${env.WORKSPACE}/app/crud-frontend"){
-					sh 'docker build -t frontend:v1 .'
+					sh 'docker build -t frontend:${BUILD_NUMBER} .'
 				}
 			}
 		}
-        	stage ('docker image push to Nexus') {
+        	stage ('push docker images to Nexus') {
 		    steps {
 			withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
 			//withDockerRegistry(credentialsId: 'nexus-registry', url: 'http://172.17.0.2:8083') {
-				sh 'docker login -u \$nexus_user -p \$nexus_password 172.17.0.3:8083'
-				sh 'docker push backend:v1'
-				sh 'docker push frontend:v1'
+				sh 'docker login -u \$nexus_user -p \$nexus_password repos.nexus.com:48083'
+				sh 'docker tag backend:${BUILD_NUMBER} repos.nexus.com:48083/backend:\${BUILD_NUMBER}'
+				sh 'docker push repos.nexus.com:48083/backend:\${BUILD_NUMBER}'
+				sh 'docker tag frontend:\${BUILD_NUMBER} repos.nexus.com:48083/frontend:\${BUILD_NUMBER}'
+				sh 'docker push repos.nexus.com:48083/frontend:\${BUILD_NUMBER}'
 			}
 		    }
         	}
-		stage ('helm push to Nexus') {
+		stage ('helm push to Nexus repository') {
 			steps {
 				dir("${env.WORKSPACE}/app"){
-					withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
-						withDockerContainer(args: '--entrypoint=', image: 'alpine/helm'){
+					withDockerContainer(args:'--user="root" --entrypoint=""', image: 'dtzar/helm-kubectl'){
+						withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
 							sh 'helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git'
-							sh 'helm repo add helmRepo http://172.17.0.3:8081/repository/helmRepo/ --username \$nexus_user --password \$nexus_password'
-							sh 'helm nexus-push helmRepo app/Helm-chart --username \$nexus_user --password \$nexus_password'
+							sh 'helm repo add helmRepo http://18.130.132.167:8081/repository/helmRepo/ --username \$nexus_user --password \$nexus_password'
+							sh 'helm nexus-push helmRepo helm-chart/ --username \$nexus_user --password \$nexus_password'
 						}
 		    			}
         			}
 			}
 			post {
 			    success {
-			      sh 'docker image rm -f alpine/helm'
+				    sh 'docker image rm -f dtzar/helm-kubectl'
 			    }
           		}
 		}

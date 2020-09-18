@@ -73,7 +73,9 @@ resource "aws_instance" "db" {
     subnet_id = element(module.aws-vpc.aws_subnet_ids_private, 0)
     vpc_security_group_ids =  module.aws-vpc.aws_security_group
     associate_public_ip_address = false
-
+    tags = {
+      Name            = "database-host"
+    }
 
 } 
 
@@ -83,7 +85,7 @@ resource "aws_instance" "db" {
 */
 
 resource "aws_instance" "bastion-server" {
-  ami                         = data.aws_ami.distro.id
+  ami                         = "ami-006a0174c6c25ac06"
   instance_type               = var.aws_bastion_size
   count                       = length(var.aws_cidr_subnets_public)
   associate_public_ip_address = true
@@ -107,7 +109,7 @@ resource "aws_instance" "bastion-server" {
 */
 
 resource "aws_instance" "k8s-master" {
-  ami           = data.aws_ami.distro.id
+  ami           = "ami-006a0174c6c25ac06"
   instance_type = var.aws_kube_master_size
 
   count = var.aws_kube_master_num
@@ -134,7 +136,7 @@ resource "aws_elb_attachment" "attach_master_nodes" {
 }
 
 resource "aws_instance" "k8s-etcd" {
-  ami           = data.aws_ami.distro.id
+  ami           = "ami-006a0174c6c25ac06"
   instance_type = var.aws_etcd_size
 
   count = var.aws_etcd_num
@@ -154,7 +156,7 @@ resource "aws_instance" "k8s-etcd" {
 }
 
 resource "aws_instance" "k8s-worker" {
-  ami           = data.aws_ami.distro.id
+  ami           = "ami-006a0174c6c25ac06"
   instance_type = var.aws_kube_worker_size
 
   count = var.aws_kube_worker_num
@@ -199,7 +201,7 @@ resource "null_resource" "inventories" {
   }
   provisioner "local-exec" {
     command = "echo --- '\n' endpoint: ${aws_instance.db.private_ip} > ${var.db_var_file}"
-
+  }
   triggers = {
     template = data.template_file.inventory.rendered
   }

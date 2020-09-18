@@ -9,8 +9,7 @@ secret:
      
 
 image:
-  repository: 3.10.94.103:8083/backend
-  tag: "v1"
+  repository: repos.nexus.com:48083/backend
 replicaCount: 1
 service:
   type: ClusterIP
