@@ -18,7 +18,7 @@ data "aws_availability_zones" "available" {}
 */
 
 module "aws-vpc" {
-  source = "./modules/vpc"
+  source = "contrib/terraform/aws/modules/vpc"
 
   aws_cluster_name         = var.aws_cluster_name
   aws_vpc_cidr_block       = var.aws_vpc_cidr_block
@@ -29,7 +29,7 @@ module "aws-vpc" {
 }
 
 module "aws-elb" {
-  source = "./modules/elb"
+  source = "contrib/terraform/aws/modules/elb"
 
   aws_cluster_name      = var.aws_cluster_name
   aws_vpc_id            = module.aws-vpc.aws_vpc_id
@@ -41,7 +41,7 @@ module "aws-elb" {
 }
 
 module "aws-iam" {
-  source = "./modules/iam"
+  source = "contrib/terraform/aws/modules/iam"
 
   aws_cluster_name = var.aws_cluster_name
 }
