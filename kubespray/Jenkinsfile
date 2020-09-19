@@ -13,15 +13,15 @@ pipeline {
     }
     stage('terraform'){
       steps{
-        dir("${env.WORKSPACE}/kubespray/contrib/terraform/aws"){
+        dir("${env.WORKSPACE}/kubespray"){
           withDockerContainer(args: '--entrypoint=',image: 'hashicorp/terraform') {
-              sh 'terraform init'
-              sh 'terraform plan -out kubespray --var-file="credentials.tfvars"'
+              sh 'terraform init contrib/terraform/aws'
+              sh 'terraform plan -out kubespray --var-file="contrib/terraform/aws/credentials.tfvars"'
               input(message: 'approve the plan to proceed and apply', ok: 'Yes !')
               sh 'terraform apply "kubespray"'
           }
-        }
-            dir("${env.WORKSPACE}/kubespray"){
+        //}
+            //dir("${env.WORKSPACE}/kubespray"){
               withCredentials([usernamePassword(credentialsId: 'gitCred', usernameVariable: 'Github_user', passwordVariable: 'Github_pass')]){
                 sh 'git config --global user.email "samiaerahaoui.aws@gmail.com"'
                 sh 'git config --global user.name $Github_user'
