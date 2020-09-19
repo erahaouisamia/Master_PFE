@@ -15,7 +15,7 @@
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
     "ssh_keypair_name": "keypair_aws",
-    "ssh_private_key_file": "keypair_aws.pem",
+    "ssh_private_key_file": "./keypair_aws.pem",
     "ami_name": "bd-image-packer"
   }
   ],
