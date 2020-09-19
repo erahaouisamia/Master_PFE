@@ -32,5 +32,5 @@ default_tags = {
   #  Product = "kubernetes"
 }
 
-inventory_file = "kubespray/inventory/hosts"
-db_var_file = "kubespray/db.yml"
+inventory_file = "inventory/hosts"
+db_var_file = "db.yml"
