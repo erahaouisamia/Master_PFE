@@ -23,7 +23,7 @@ pipeline {
       }
       post {
         success {
-          sh 'docker rm -f hashicorp/packer'
+          sh 'docker image rm -f hashicorp/packer'
         }
     }
   }
