@@ -15,9 +15,9 @@ pipeline {
     }
     stage('Build img') {
       steps {
-         dir("${env.WORKSPACE}/Database"){
+         dir("${env.WORKSPACE}"){
             withDockerContainer(args: '--entrypoint=',image: 'hashicorp/packer') {
-              sh label: '', script: 'packer build packer_image.json'
+              sh label: '', script: 'packer build Database/packer_image.json'
             }
   		  }
       }
