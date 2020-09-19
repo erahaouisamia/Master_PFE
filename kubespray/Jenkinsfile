@@ -15,8 +15,6 @@ pipeline {
       steps{
         dir("${env.WORKSPACE}/kubespray/contrib/terraform/aws"){
           withDockerContainer(args: '--entrypoint=',image: 'hashicorp/terraform') {
-              sh 'terraform destroy --var-file="credentials.tfvars"'
-              input(message: 'approve the init to proceed and apply', ok: 'Yes !')
               sh 'terraform init'
               sh 'terraform plan -out kubespray --var-file="credentials.tfvars"'
               input(message: 'approve the plan to proceed and apply', ok: 'Yes !')
