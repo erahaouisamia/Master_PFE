@@ -23,7 +23,7 @@
   "provisioners":[
     {
      "type":"shell",
-     "script":"./setup.sh" 
+     "script":"Database/setup.sh" 
 	},
   {
     "type":"ansible-local",
