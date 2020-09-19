@@ -135,3 +135,13 @@
   roles:
     - { role: kubespray-defaults }
     - { role: kubernetes/preinstall, when: "dns_mode != 'none' and resolvconf_mode == 'host_resolvconf'", tags: resolvconf, dns_late: true }
+- hosts: kube-master
+  gather_facts: False
+  become: true
+  tasks:
+  - name: install HELM binnary
+    command: "{{ item }}"
+    with_items:
+         - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+         - chmod 700 get_helm.sh
+         - ./get_helm.sh
