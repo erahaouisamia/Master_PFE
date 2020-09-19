@@ -12,7 +12,7 @@ pipeline {
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'app']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/erahaouisamia/repo_idemia/']]])
 			}
         	}
-		stage('backend jar'){
+		stage('backend'){
 			steps {
 				dir("${env.WORKSPACE}/app/crud-api"){
 					withDockerContainer(image: 'maven:3.6.3-openjdk-8')
