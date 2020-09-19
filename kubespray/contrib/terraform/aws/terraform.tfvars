@@ -33,4 +33,4 @@ default_tags = {
 }
 
 inventory_file = "kubespray/inventory/hosts"
-db_var_file ="kubespray/db.yml"
+db_var_file = "kubespray/db.yml"
