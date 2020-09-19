@@ -15,11 +15,12 @@ pipeline {
       steps{
         dir("${env.WORKSPACE}/kubespray"){
           withDockerContainer(args: '--entrypoint=',image: 'hashicorp/terraform') {
-              sh 'cd contrib/terraform/aws'
-              sh 'terraform init'
-              sh 'terraform plan -out kubespray --var-file="credentials.tfvars"'
-              input(message: 'approve the plan to proceed and apply', ok: 'Yes !')
-              sh 'terraform apply "kubespray"'
+              dir("contrib/terraform/aws"){
+                sh 'terraform init'
+                sh 'terraform plan -out kubespray --var-file="credentials.tfvars"'
+                input(message: 'approve the plan to proceed and apply', ok: 'Yes !')
+                sh 'terraform apply "kubespray"'
+              }
           }
         //}
           //dir("${env.WORKSPACE}/kubespray"){
