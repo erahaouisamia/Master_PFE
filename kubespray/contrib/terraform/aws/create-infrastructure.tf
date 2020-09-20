@@ -71,6 +71,7 @@ resource "aws_instance" "db" {
     key_name = var.AWS_SSH_KEY_NAME
     availability_zone           = element(slice(data.aws_availability_zones.available.names, 0, 2), 0)
     subnet_id = element(module.aws-vpc.aws_subnet_ids_private, 0)
+    private_ip = "10.250.192.1"
     vpc_security_group_ids =  module.aws-vpc.aws_security_group
     associate_public_ip_address = false
     tags = {
