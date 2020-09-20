@@ -1,6 +1,6 @@
 secret:
   database_uri:
-    dbip:
+    dbip: 10.250.192.1
     username: postgres
     password: postgres
     dbport: 5432
