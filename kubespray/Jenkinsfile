@@ -29,9 +29,9 @@ pipeline {
                 sh 'git config --global user.name $Github_user'
                 sh 'git remote rm origin'
                 sh 'git remote add origin https://${Github_user}:${Github_pass}@github.com/erahaouisamia/repo_idemia.git > /dev/null 2>&1'
-                sh 'git add inventory/hosts contrib/terraform/aws/mysuperplan'
+                sh 'git add inventory/hosts contrib/terraform/aws/kubespray'
                 sh 'git commit -m "Added file with automated Jenikins job Terraform"'
-                sh 'git push origin master'
+                sh 'git push origin HEAD:master'
               }
             }
           }
@@ -67,7 +67,7 @@ pipeline {
             sh 'git remote add origin https://${Github_user}:${Github_token}@github.com/erahaouisamia/repo_idemia.git > /dev/null 2>&1'
             sh 'git add ssh-bastion.conf'
             sh 'git commit -m "Added file with automated Jenikins job Terraform"'
-            sh 'git push origin master'
+            sh 'git push origin HEAD:master'
           }
         }
       }
