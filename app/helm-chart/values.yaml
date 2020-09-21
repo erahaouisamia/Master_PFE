@@ -10,14 +10,12 @@ replicaCount: 1
 service:
   type: LoadBalancer
   port: 80
-
+secret: letsencrypt-prod
 ingress:
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: instance
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  tls:
-    - secretName: letsencrypt-prod
   hosts:
    - host:
        domain: crudemployee.com
