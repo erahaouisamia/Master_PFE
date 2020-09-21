@@ -3,11 +3,14 @@ kind: Ingress
 metadata:
   name: api-ingress
   annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: instance
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  tls:
+{{- range .Values.ingress.hosts }}
+  - hosts:
+{{- end }}
   rules:
 {{- range .Values.ingress.hosts }}
   - host: {{ .host.domain }}
