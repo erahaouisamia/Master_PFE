@@ -8,13 +8,11 @@ metadata:
 {{- end }}
 spec:
   tls:
-  {{- range .Values.ingress.tls }}
   - hosts:
-    {{- range .hosts }}
-      - {{ . }}
-    {{- end }}
-    secretName: {{ .secretName }}
+  {{- range .Values.ingress.hosts }}
+    - {{ .host.domain }}
   {{- end }}
+    secretName: {{ ..Values.secret }}
   rules:
   {{- range .Values.ingress.hosts }}
   - host: {{ .host.domain }}
