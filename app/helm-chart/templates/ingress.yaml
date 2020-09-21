@@ -9,7 +9,8 @@ metadata:
 spec:
   tls:
 {{- range .Values.ingress.hosts }}
-  - hosts:
+  - hosts: {{ .host.domain }}
+    secretName: letsencrypt-prod
 {{- end }}
   rules:
 {{- range .Values.ingress.hosts }}
