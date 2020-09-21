@@ -5,12 +5,13 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: instance
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: {{ .Values.issuer | quote }}
+    "letsencrypt-prod"
 spec:
   tls:
 {{- range .Values.ingress.hosts }}
   - hosts: {{ .host.domain }}
-    secretName: letsencrypt-prod
+    secretName: {{ .Values.issuer }}
 {{- end }}
   rules:
 {{- range .Values.ingress.hosts }}
