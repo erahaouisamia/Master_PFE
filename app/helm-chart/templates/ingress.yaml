@@ -2,18 +2,21 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: api-ingress
+{{- with .Values.ingress.annotations }}
   annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/target-type: instance
-    cert-manager.io/cluster-issuer: {{ .Values.issuer | quote }}
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   tls:
-{{- range .Values.ingress.hosts }}
-  - hosts: {{ .host.domain }}
-    secretName: {{ .Values.issuer }}
-{{- end }}
+  {{- range .Values.ingress.tls }}
+  - hosts:
+    {{- range .hosts }}
+      - {{ . }}
+    {{- end }}
+    secretName: {{ .secretName }}
+  {{- end }}
   rules:
-{{- range .Values.ingress.hosts }}
+  {{- range .Values.ingress.hosts }}
   - host: {{ .host.domain }}
     http:
       paths:
@@ -21,4 +24,4 @@ spec:
         backend:
           serviceName: {{ include "crud.fullname" $ }}
           servicePort: {{ .host.port }}
-{{- end }}
+  {{- end }}
