@@ -19,8 +19,7 @@ ingress:
   tls:
     - secretName: letsencrypt-prod
       hosts:
-        - host:
-            domain: crudemployee.com
+        - crudemployee.com
    hosts:
     - host:
         domain: crudemployee.com
