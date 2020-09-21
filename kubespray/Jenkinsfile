@@ -43,7 +43,7 @@ pipeline {
         }
     stage('Create k8s cluster') {
       steps{
-        withCredentials([file(credentialsId: 'private_key', variable: 'private_key'),usernamePassword(credentialsId: 'github-token', usernameVariable: 'Github_user', passwordVariable: 'Github_token'),usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
+        withCredentials([file(credentialsId: 'private_key', variable: 'private_key'),usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
         {
           //sh 'cd /home'
           sh 'mkdir /home/jenkins/.ssh && chmod 700 /home/jenkins/.ssh'
