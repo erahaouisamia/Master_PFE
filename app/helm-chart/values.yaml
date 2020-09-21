@@ -12,11 +12,11 @@ service:
   port: 80
 
 ingress:
-  annotations: {}
+  annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: instance
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  tls: []
+  tls:
     - secretName: letsencrypt-prod
       hosts:
         - crudemployee.com
