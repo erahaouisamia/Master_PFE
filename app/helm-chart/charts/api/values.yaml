@@ -13,4 +13,4 @@ service:
   type: ClusterIP
   port: 8090
 ingress:
-  enabled: true
+  enabled: false
