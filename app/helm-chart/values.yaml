@@ -5,9 +5,11 @@
 global:
   RegSec: prvrg
 backend:
-  secret:
-    database_uri:
-      dbip: 10.250.202.199
+  dbip:
+  username: postgres
+  password: postgres
+  dbname: employeedb
+      
 image:
   repository: repos.nexus.com:48083/frontend
 replicaCount: 1
