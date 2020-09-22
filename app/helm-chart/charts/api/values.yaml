@@ -1,3 +1,11 @@
+secret:
+  database_uri:
+    dbip:
+    username: postgres
+    password: postgres
+    dbport: 5432
+    dbname: employeedb
+    dbconn: ?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
 image:
   repository: repos.nexus.com:48083/backend
 replicaCount: 1
