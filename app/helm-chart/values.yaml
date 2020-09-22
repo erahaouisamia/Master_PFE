@@ -4,7 +4,7 @@
 
 global:
   RegSec: prvrg
-backend:
+api:
   dbip:
   username: postgres
   password: postgres
