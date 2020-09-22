@@ -37,7 +37,7 @@ pipeline {
           }
           post {
             success {
-              sh 'docker rm -f hashicorp/terraform'
+              sh 'docker image rm -f hashicorp/terraform'
             }
           }
         }
