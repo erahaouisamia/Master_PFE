@@ -2,27 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "api.fullname" . }}
-  labels: 
-    {{- include "api.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "api.selectorLabels" . | nindent 6 }}
+      app: {{ include "api.fullname" . }}
   template:
     metadata:
       labels:
-        {{- include "api.selectorLabels" . | nindent 8 }}
+        app: {{ include "api.fullname" . }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.global.RegSec }}
       containers:
         - name: backend
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          image: {{ .Values.image.repository }}
           ports:
             - containerPort: 8090
           imagePullPolicy: IfNotPresent
           env:
+          - name: SPRING_DATASOURCE_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "api.fullname" . }}-secret
+                key: database-uri
           - name: SPRING_DATASOURCE_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -33,23 +36,17 @@ spec:
               secretKeyRef:
                 name: {{ include "api.fullname" . }}-secret
                 key: database-user
-          - name: SPRING_DATASOURCE_URL
-            valueFrom:
-              secretKeyRef:
-                name: {{ include "api.fullname" . }}-secret
-                key: database-uri
-
 ---
 apiVersion: v1                
 kind: Service                 
 metadata:                     
   name: {{ include "api.fullname" . }}
   labels: 
-    {{- include "api.labels" . | nindent 4 }}
+    app: {{ include "api.fullname" . }}
 spec:      
   type: ClusterIP                   
   selector:
-    {{- include "api.selectorLabels" . | nindent 6 }}
+    app: {{ include "api.fullname" . }}
   ports:
   - port: {{ .Values.service.port }}
     protocol: TCP
