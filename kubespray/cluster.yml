@@ -147,4 +147,4 @@
          - ./get_helm.sh
     
   - name: Docker  private registry
-    command: kubectl create secret docker-registry prvrg --docker-server=repos.nexus.com --docker-username=admin --docker-password=nexus_repos
+    command: kubectl create secret docker-registry prvrg --docker-server=repos.nexus.com:48083 --docker-username=admin --docker-password=nexus_repos
