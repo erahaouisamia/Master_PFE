@@ -50,7 +50,7 @@ pipeline {
           sh 'cd /home/ubuntu/.ssh && cp \$private_key kubespray.pem && chmod 600 kubespray.pem'
           sh 'cd /home/ubuntu/.ssh && eval $(ssh-agent) && ssh-add -D && ssh-add kubespray.pem'
           dir("${env.WORKSPACE}/kubespray"){
-            sh 'pip3 install -r requirements.txt'
+            sh 'sudo pip3 install -r requirements.txt'
             sh 'ansible-playbook -i inventory/hosts cluster.yml -e ansible_user=ubuntu -e ansible_python_interpreter="/usr/bin/python3" --become-user=root --flush-cache -b'
             //sh 'ansible-playbook deploy_app_k8s.yml -e ansible_python_interpreter="/usr/bin/python3" -e nexus_username=$nexus_user -e nexus_password=$nexus_password'
           }
