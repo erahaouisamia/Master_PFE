@@ -35,4 +35,4 @@ ingress:
     - host:
         domain: crudapi.com
         chart: api
-        port: 8080
+        port: 8090
