@@ -1,7 +1,10 @@
-image: repos.nexus.com:48083/backend
+image: repos.nexus.com:48083/backend:1
+
 replicaCount: 1
+
 service:
   type: ClusterIP
   port: 8090
+
 ingress:
   enabled: false
