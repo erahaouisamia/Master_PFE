@@ -4,19 +4,24 @@
 
 global:
   RegSec: prvrg
+
 api:
   dbip:
   username: postgres
   password: postgres
   dbname: employeedb
   uri: jdbc:postgresql://{{ .Values.dbip }}:5432/{{ .Values.dbname }}/?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
-image:
-  repository: repos.nexus.com:48083/frontend
+
+image: repos.nexus.com:48083/frontend:1
+
 replicaCount: 1
+
 service:
   type: LoadBalancer
   port: 80
+
 secret: letsencrypt-prod
+
 ingress:
   annotations:
     kubernetes.io/ingress.class: alb
