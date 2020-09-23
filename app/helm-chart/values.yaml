@@ -28,11 +28,11 @@ ingress:
     alb.ingress.kubernetes.io/target-type: instance
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
   hosts:
-   - host:
-       domain: crudemployee.com
-       chart: frontend
-       port: 80
-   - host:
-       domain: crudemployee.com
-       chart: api
-       port: 8080
+    - host:
+        domain: crudemployee.com
+        chart: frontend
+        port: 80
+    - host:
+        domain: crudemployee.com
+        chart: api
+        port: 8080
