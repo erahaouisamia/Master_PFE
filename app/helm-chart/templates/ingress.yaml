@@ -2,19 +2,24 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: api-ingress
+{{- with .Values.ingress.annotations }}
   annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/target-type: instance
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
+  tls:
+  - hosts:
+  {{- range .Values.ingress.hosts }}
+    - {{ .host.domain }}
+  {{- end }}
+    secretName: {{ .Values.secret }}
   rules:
-{{- range .Values.ingress.hosts }}
+  {{- range .Values.ingress.hosts }}
   - host: {{ .host.domain }}
     http:
       paths:
       - path: /*
         backend:
-          serviceName: {{ include "crud.fullname" $ }}
+          serviceName: {{ $.Release.Name}}-{{ .host.chart }}
           servicePort: {{ .host.port }}
-{{- end }}
+  {{- end }}

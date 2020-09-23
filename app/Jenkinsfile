@@ -1,7 +1,7 @@
 pipeline {
 	agent{
 		node{
-			label 'master'
+			label 'slave'
 		}
 	}
 
@@ -34,7 +34,7 @@ pipeline {
 				{
 					withDockerContainer(image: 'node:latest'){
 						sh 'npm install'
-						sh 'npm run build -- --prod' 
+						sh 'npm run build -- --outputPath=dist/out --prod' 
 					}
 				}
 			}

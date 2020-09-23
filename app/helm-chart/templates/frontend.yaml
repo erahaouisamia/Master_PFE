@@ -2,23 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "crud.fullname" . }}
-  labels: 
-    {{- include "crud.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "crud.selectorLabels" . | nindent 6 }}
+      app: {{ include "crud.fullname" . }}
   template:
     metadata:
       labels:
-        {{- include "crud.selectorLabels" . | nindent 8 }}
+        app: {{ include "crud.fullname" . }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.global.RegSec }}
       containers:
         - name: frontend
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          image: {{ .Values.image }}
           ports:
             - containerPort: 80
           imagePullPolicy: IfNotPresent
@@ -28,11 +26,11 @@ kind: Service
 metadata:                     
   name: {{ include "crud.fullname" . }}
   labels: 
-    {{- include "crud.labels" . | nindent 4 }}
+    app: {{ include "crud.fullname" . }}
 spec:
   type: {{ .Values.service.type }}               
   selector:
-    {{- include "crud.selectorLabels" . | nindent 6 }}
+    app: {{ include "crud.fullname" . }}
   ports:                      
   - port: {{ .Values.service.port }}
     protocol: TCP

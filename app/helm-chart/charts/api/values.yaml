@@ -1,16 +1,10 @@
-secret:
-  database_uri:
-    dbip:
-    username: postgres
-    password: postgres
-    dbport: 5432
-    dbname: employeedb
-    dbconn: ?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
-     
+image: repos.nexus.com:48083/backend:1
 
-image:
-  repository: repos.nexus.com:48083/backend
 replicaCount: 1
+
 service:
   type: ClusterIP
   port: 8090
+
+ingress:
+  enabled: false
