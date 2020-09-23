@@ -33,6 +33,6 @@ ingress:
         chart: frontend
         port: 80
     - host:
-        domain: crudemployee.com
+        domain: crudapi.com
         chart: api
         port: 8080
