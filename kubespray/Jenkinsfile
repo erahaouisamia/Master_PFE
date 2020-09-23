@@ -43,12 +43,12 @@ pipeline {
         }
     stage('Create k8s cluster') {
       steps{
-        withCredentials([file(credentialsId: 'private_key', variable: 'private_key'),usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
+        withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
         {
           //sh 'cd /home'
           //sh 'mkdir /home/jenkins/.ssh && chmod 700 /home/jenkins/.ssh'
           dir("${env.WORKSPACE}/kubespray"){
-            sh 'cp \$private_key /home/ubuntu/.ssh/kubespray.pem'
+            sh 'cp keypair_aws.pem /home/ubuntu/.ssh/kubespray.pem'
             sh 'chmod 600 /home/ubuntu/.ssh/kubespray.pem'
             sh 'eval $(ssh-agent) && ssh-add -D && ssh-add /home/ubuntu/.ssh/kubespray.pem'
             sh 'sudo pip3 install -r requirements.txt'
