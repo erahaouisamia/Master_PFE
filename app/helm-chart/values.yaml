@@ -9,7 +9,7 @@ api:
   username: postgres
   password: postgres
   dbname: employeedb
-      
+  uri: jdbc:postgresql://{{ .Values.dbip }}:5432/{{ .Values.dbname }}/?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
 image:
   repository: repos.nexus.com:48083/frontend
 replicaCount: 1
