@@ -1,9 +1,4 @@
-  dbip:
-  username: postgres
-  password: postgres
-  dbname: employeedb
-image:
-  repository: repos.nexus.com:48083/backend
+image: repos.nexus.com:48083/backend
 replicaCount: 1
 service:
   type: ClusterIP
