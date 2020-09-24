@@ -43,11 +43,8 @@ pipeline {
         }
     stage('Create k8s cluster') {
       steps{
-        withCredentials([file(credentialsId: 'private_key', variable: 'private_key'),usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
+        withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
         {
-          sh 'cd /home/ubuntu/.ssh && mkdir kubespray && chmod 700 kubespray'
-          sh 'cd /home/ubuntu/.ssh/kubespray && cp \$private_key id_rsa && chmod 600 id_rsa'
-          sh 'cd /home/ubuntu/.ssh/kubespray && eval $(ssh-agent) && ssh-add -D && ssh-add id_rsa'
           dir("${env.WORKSPACE}/kubespray"){
             sh 'sudo pip3 install -r requirements.txt'
             sh 'ansible-playbook -i inventory/hosts cluster.yml -e ansible_user=ubuntu -e ansible_python_interpreter="/usr/bin/python3" --become-user=root --flush-cache -b'
