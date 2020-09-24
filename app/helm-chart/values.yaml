@@ -12,7 +12,7 @@ api:
   dbname: employeedb
   uri: jdbc:postgresql://{{ .Values.api.dbip }}:5432/{{ .Values.api.dbname }}/?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
 
-image: repos.nexus.com:48083/frontend:4
+image: repos.nexus.com:48083/frontend:1
 
 replicaCount: 1
 
