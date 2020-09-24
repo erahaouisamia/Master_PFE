@@ -45,12 +45,10 @@ pipeline {
       steps{
         withCredentials([file(credentialsId: 'private_key', variable: 'private_key'),usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
         {
-          //sh 'cd /home'
-          //sh 'mkdir /home/jenkins/.ssh && chmod 700 /home/jenkins/.ssh'
+          sh 'cd /home/ubuntu/.ssh && mkdir kubespray && chmod 700 kubespray'
+          sh 'cd /home/ubuntu/.ssh/kubespray && cp \$private_key id_rsa && chmod 600 id_rsa'
+          sh 'cd /home/ubuntu/.ssh/kubespray && eval $(ssh-agent) && ssh-add -D && ssh-add id_rsa'
           dir("${env.WORKSPACE}/kubespray"){
-            sh 'cd /home/ubuntu/.ssh && mkdir kubespray'
-            sh 'cd /home/ubuntu/.ssh/kubespray && cp \$private_key id_rsa && chmod 600 id_rsa'
-            sh 'cd /home/ubuntu/.ssh/kubespray && eval $(ssh-agent) && ssh-add -D && ssh-add id_rsa'
             sh 'sudo pip3 install -r requirements.txt'
             sh 'ansible-playbook -i inventory/hosts cluster.yml -e ansible_user=ubuntu -e ansible_python_interpreter="/usr/bin/python3" --become-user=root --flush-cache -b'
             //sh 'ansible-playbook deploy_app_k8s.yml -e ansible_python_interpreter="/usr/bin/python3" -e nexus_username=$nexus_user -e nexus_password=$nexus_password'
