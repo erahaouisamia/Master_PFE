@@ -17,7 +17,7 @@ image: repos.nexus.com:48083/frontend:4
 replicaCount: 1
 
 service:
-  type: LoadBalancer
+  type: NodePort
   port: 80
 
 secret: letsencrypt-prod
