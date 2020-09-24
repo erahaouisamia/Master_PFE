@@ -18,8 +18,12 @@ spec:
   - host: {{ .host.domain }}
     http:
       paths:
-      - path: /*
+      - path: /
         backend:
-          serviceName: {{ $.Release.Name }}-{{ .host.chart }}
+          serviceName: {{ include "crud.fullname" $ }}
+          servicePort: {{ .host.port }}
+      - path: /(.+)
+        backend:
+          serviceName: {{ include "api.fullname" $ }}
           servicePort: {{ .host.port }}
   {{- end }}
