@@ -9,21 +9,17 @@ metadata:
 spec:
   tls:
   - hosts:
-  {{- range .Values.ingress.hosts }}
-    - {{ .host.domain }}
-  {{- end }}
+    - {{ .Values.domain }}
     secretName: {{ .Values.secret }}
   rules:
-  {{- range .Values.ingress.hosts }}
-  - host: {{ .host.domain }}
+  - host: {{ .Values.domain }}
     http:
       paths:
       - path: /
         backend:
           serviceName: {{ include "crud.fullname" $ }}
-          servicePort: {{ .host.port }}
+          servicePort: {{ .Values.service.port }}
       - path: /(.+)
         backend:
           serviceName: {{ include "api.fullname" $ }}
-          servicePort: {{ .host.port }}
-  {{- end }}
+          servicePort: {{ .Values.apiport }}
