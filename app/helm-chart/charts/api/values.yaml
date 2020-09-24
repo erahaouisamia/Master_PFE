@@ -1,7 +1,7 @@
-image: repos.nexus.com:48083/backend:4
+image: repos.nexus.com:48083/backend:1
 
 replicaCount: 1
 
 service:
-  type: LoadBalancer
+  type: NodePort
   port: 8090
