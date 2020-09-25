@@ -23,8 +23,8 @@ spec:
           env:
           - name: SPRING_DATASOURCE_URL
             valueFrom:
-              secretKeyRef:
-                name: {{ include "api.fullname" . }}-secret
+              configMapKeyRef:
+                name: configdb
                 key: database-uri
           - name: SPRING_DATASOURCE_PASSWORD
             valueFrom:
@@ -44,7 +44,7 @@ metadata:
   labels: 
     app: {{ include "api.fullname" . }}
 spec:      
-  type: ClusterIP                   
+  type: {{ .Values.service.type }}                   
   selector:
     app: {{ include "api.fullname" . }}
   ports:
