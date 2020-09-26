@@ -142,9 +142,17 @@
   - name: install HELM binnary
     command: "{{ item }}"
     with_items:
-         - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-         - chmod 700 get_helm.sh
-         - ./get_helm.sh
+      - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+      - chmod 700 get_helm.sh
+      - ./get_helm.sh
     
   - name: Docker  private registry
     command: kubectl create secret docker-registry prvrg --docker-server=repos.nexus.com:48083 --docker-username=admin --docker-password=nexus_repos
+- hosts: k8s-cluster
+  gather_facts: False
+  become: true
+  tasks:
+  - name: add insecure docker registry
+    command: "{{ item }}"
+    with_items:
+      - echo "{ \"insecure-registries\": [\"repos.nexus.com:48083\"] } > /etc/docker/daemon.json
