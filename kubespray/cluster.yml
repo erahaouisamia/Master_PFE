@@ -158,3 +158,4 @@
       - echo '{ "insecure-registries": ["repos.nexus.com:48083"] }' > /etc/docker/daemon.json
       - systemctl daemon-reload
       - systemctl restart docker
+      - echo "18.133.237.147 repos.nexus.com" >> /etc/hosts
