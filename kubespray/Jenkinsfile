@@ -43,7 +43,7 @@ pipeline {
         }
     stage('Create k8s cluster') {
       steps{
-        withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
+        withCredentials([file(credentialsId: 'private_key', variable: 'private_key'),usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')])
         {
           sh 'mkdir /home/ubuntu/.ssh/kybespray && chmod 700 /home/ubuntu/.ssh/kybespray'
           sh 'cd /home/ubuntu/.ssh/kybespray && cp \$private_key kubespray.pem && chmod 600 kubespray.pem'
