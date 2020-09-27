@@ -156,6 +156,6 @@
   - name: add insecure docker registry
     command: "{{ item }}"
     with_items:
-      - echo "{ \"insecure-registries\": [\"repos.nexus.com:48083\"] } > /etc/docker/daemon.json
+      - echo "{ \"insecure-registries\": [\"repos.nexus.com:48083\"] }" > /etc/docker/daemon.json
       - systemctl daemon-reload
       - systemctl restart docker
