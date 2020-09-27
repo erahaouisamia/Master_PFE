@@ -148,6 +148,7 @@
     
   - name: Docker  private registry
     command: kubectl create secret docker-registry prvrg --docker-server=repos.nexus.com:48083 --docker-username=admin --docker-password=nexus_repos
+ 
 - hosts: k8s-cluster
   gather_facts: False
   become: true
@@ -156,3 +157,5 @@
     command: "{{ item }}"
     with_items:
       - echo "{ \"insecure-registries\": [\"repos.nexus.com:48083\"] } > /etc/docker/daemon.json
+      - systemctl daemon-reload
+      - systemctl restart docker
