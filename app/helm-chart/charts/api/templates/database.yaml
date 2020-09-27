@@ -12,6 +12,6 @@ metadata:
   name: postgres-db-svc
 subsets:
   - addresses:
-      - ip: {{ .Values.secret.dbip }}
+      - ip: {{ .Values.db.dbip }}
     ports:
       - port: 5432
