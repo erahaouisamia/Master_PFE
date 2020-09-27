@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: configdb
 data:
-  database-uri: jdbc:postgresql://postgres-db-svc/{{ .Values.secret.dbname }}{{ .Values.secret.dbconn }}
+  database-uri: jdbc:postgresql://postgres-db-svc/{{ .Values.db.dbname }}{{ .Values.db.dbconn }}
