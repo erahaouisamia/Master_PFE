@@ -22,6 +22,10 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
           - name: SPRING_DATASOURCE_URL
+            #valueFrom:
+              #secretKeyRef:
+                #name: {{ include "api.fullname" . }}-secret
+                #key: database-uri
             valueFrom:
               configMapKeyRef:
                 name: configdb
