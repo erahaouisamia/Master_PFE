@@ -29,7 +29,7 @@ secretMounts: []
 #    subPath: kibana.keystore # optional
 
 image: "docker.elastic.co/kibana/kibana"
-imageTag: "7.9.2"
+imageTag: "8.0.0-SNAPSHOT"
 imagePullPolicy: "IfNotPresent"
 
 # additionals labels
@@ -95,7 +95,7 @@ service:
   type: NodePort
   loadBalancerIP: ""
   port: 5601
-  nodePort: ""
+  nodePort: "30002"
   labels: {}
   annotations: {}
     # cloud.google.com/load-balancer-type: "Internal"

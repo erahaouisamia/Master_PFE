@@ -155,7 +155,7 @@ ingress:
 service:
   type: NodePort
   port: 8200
-  nodePort: ""
+  nodePort: 30004
   annotations: {}
     # cloud.google.com/load-balancer-type: "Internal"
     # service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0

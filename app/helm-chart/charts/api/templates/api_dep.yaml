@@ -17,6 +17,14 @@ spec:
       containers:
         - name: backend
           image: {{ .Values.image.repository }}
+           command:
+          - "java"
+          - "-javaagent:/apm-agent.jar"
+          - "-Delastic.apm.active=$(ELASTIC_APM_ACTIVE)"
+          - "-Delastic.apm.server_urls=$(ELASTIC_APM_SERVER)"
+          - "-Delastic.apm.service_name=spring-boot-app"
+          - "-jar"
+          - "springboot2-jpa-crud-example.jar"
           ports:
             - containerPort: 8090
           imagePullPolicy: IfNotPresent
