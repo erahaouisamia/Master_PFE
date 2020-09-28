@@ -1,4 +1,5 @@
-image: repos.nexus.com:48083/backend:1
+image:
+  repository: repos.nexus.com:48083/backend
 
 replicaCount: 1
 
