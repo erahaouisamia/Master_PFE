@@ -9,5 +9,5 @@ spec:
   releaseName: crud-app
   chart:
     repository: https://erahaouisamia:git_idemia1@github.com/erahaouisamia/repo_idemia.git
-    path: charts/crud
+    path: ../../charts/crud
     ref: master
