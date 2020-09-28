@@ -18,7 +18,7 @@ aws_kube_master_size = "t2.medium"
 aws_etcd_num  = 1
 aws_etcd_size = "t2.micro"
 
-aws_kube_worker_num  = 3
+aws_kube_worker_num  = 4
 aws_kube_worker_size = "t2.medium"
 
 #Settings AWS ELB
