@@ -18,7 +18,7 @@ pipeline {
 					withDockerContainer(image: 'maven:3.6.3-openjdk-8')
 					{
 						sh label: '', script: 'mvn clean compile'
-						sh 'mvn clean package'
+						sh 'mvn clean package -Dmaven.test.skip=true'
 					}
 				}
 			}
