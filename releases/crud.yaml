@@ -8,6 +8,6 @@ metadata:
 spec:
   releaseName: crud-app
   chart:
-    ssh://git@github.com/erahaouisamia/repo_idemia.git
+    git: ssh://git@github.com/erahaouisamia/repo_idemia.git
     path: app/helm-chart
     ref: master
