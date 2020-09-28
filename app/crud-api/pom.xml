@@ -8,10 +8,10 @@
 		<version>2.2.5.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>crudapi</groupId>
-	<artifactId>crud-api</artifactId>
+	<groupId>net.guides.springboot2</groupId>
+	<artifactId>springboot2-jpa-crud-example</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>crud-api</name>
+	<name>springboot2-jpa-crud-example</name>
 	<description>Rest API for a Simple Employee Management Application</description>
 
 	<properties>
@@ -35,16 +35,32 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-		    <groupId>postgresql</groupId>
+		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
-		    <version>9.1-901-1.jdbc4</version>
+		    <version>42.2.1</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+			
 		</dependency>
+		<dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-agent-api</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-opentracing</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-cloud-mongo-starter</artifactId>
+            <version>0.2.3</version>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -60,16 +76,16 @@
 		        <version>1.4.13</version>
 		        <executions>
 		        	<execution>
-					<id>default</id>
-					<phase>install</phase>
-					<goals>
-						<goal>build</goal>
-						<goal>push</goal>
-					</goals>
-		                </execution>
+			        <id>default</id>
+			        <phase>install</phase>
+			        <goals>
+				        <goal>build</goal>
+				        <goal>push</goal>
+		            </goals>
+		                    </execution>
 		          </executions>
 		          <configuration>
-		          	<repository>172.31.16.10:8083/${project.artifactId}</repository>
+		          	<repository>192.168.1.11:8083/${project.artifactId}</repository>
 		            	<tag>${project.version}</tag>
 		                <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
 		                 <buildArgs>

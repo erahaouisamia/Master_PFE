@@ -1,0 +1,13 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: crud
+  namespace: default
+  annotations:
+    fluxcd.io/automated: "true"
+spec:
+  releaseName: crud-app
+  chart:
+    repository: https://erahaouisamia:git_idemia1@github.com/erahaouisamia/repo_idemia.git
+    path: charts/crud
+    ref: master
