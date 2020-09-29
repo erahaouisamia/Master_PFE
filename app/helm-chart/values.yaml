@@ -35,5 +35,5 @@ ingress:
         port: 80
     - host:
         domain: crudemployee.com
-        #chart: api
+        chart: api
         port: 8090
