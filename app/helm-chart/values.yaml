@@ -15,8 +15,8 @@ api:
     dbconn: ?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
 
 image:
-  repository: repos.nexus.com:48083/frontend:1
-  #tag: 1
+  repository: repos.nexus.com:48083/frontend
+  tag: 1
 
 replicaCount: 1
 
