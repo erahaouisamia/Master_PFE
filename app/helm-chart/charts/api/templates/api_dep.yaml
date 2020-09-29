@@ -29,12 +29,12 @@ spec:
             - containerPort: 8090
           imagePullPolicy: IfNotPresent
           resources:
-          requests:
-            cpu: 400m
-            memory: 400Mi
-          limits:
-            memory: "500Mi"
-            cpu: "500m"  
+            requests:
+              cpu: 400m
+              memory: 400Mi
+            limits:
+              memory: "500Mi"
+              cpu: "500m"  
           env:
           - name: SPRING_DATASOURCE_URL
             #valueFrom:
