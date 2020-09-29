@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/name: alb-ingress-controller
   name: alb-ingress-controller
-  namespace: kube-system
+  #namespace: kube-system
   # Namespace the ALB Ingress Controller should run in. Does not impact which
   # namespaces it's able to resolve ingress resource for. For limiting ingress
   # namespace scope, see --watch-namespace.
