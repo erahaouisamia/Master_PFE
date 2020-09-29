@@ -7,7 +7,7 @@ global:
 
 api:
   db:
-    dbip: 10.250.203.201
+    dbip: 10.250.200.237
     dbport: 5432
     username: postgres
     password: postgres
