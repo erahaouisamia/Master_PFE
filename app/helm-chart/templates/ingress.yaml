@@ -19,7 +19,7 @@ spec:
     http:
       paths:
       {{- if .host.chart }}
-      - path: /restapi/(.+)
+      - path: /restapi/
         backend:
           serviceName: {{ $.Release.Name }}-{{ .host.chart }}
           servicePort: {{ .host.port }}
