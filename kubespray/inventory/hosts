@@ -1,30 +1,30 @@
 [all]
-ip-10-250-193-74.eu-west-2.compute.internal ansible_host=10.250.193.74
-ip-10-250-206-157.eu-west-2.compute.internal ansible_host=10.250.206.157
-ip-10-250-217-192.eu-west-2.compute.internal ansible_host=10.250.217.192
-ip-10-250-204-124.eu-west-2.compute.internal ansible_host=10.250.204.124
-ip-10-250-223-3.eu-west-2.compute.internal ansible_host=10.250.223.3
-ip-10-250-197-180.eu-west-2.compute.internal ansible_host=10.250.197.180
-bastion ansible_host=18.133.157.162
-bastion ansible_host=35.178.151.147
+ip-10-250-205-162.eu-west-2.compute.internal ansible_host=10.250.205.162
+ip-10-250-202-43.eu-west-2.compute.internal ansible_host=10.250.202.43
+ip-10-250-221-207.eu-west-2.compute.internal ansible_host=10.250.221.207
+ip-10-250-198-98.eu-west-2.compute.internal ansible_host=10.250.198.98
+ip-10-250-223-234.eu-west-2.compute.internal ansible_host=10.250.223.234
+ip-10-250-195-155.eu-west-2.compute.internal ansible_host=10.250.195.155
+bastion ansible_host=3.10.24.10
+bastion ansible_host=18.133.197.23
 
 [bastion]
-bastion ansible_host=18.133.157.162
-bastion ansible_host=35.178.151.147
+bastion ansible_host=3.10.24.10
+bastion ansible_host=18.133.197.23
 
 [kube-master]
-ip-10-250-193-74.eu-west-2.compute.internal
+ip-10-250-205-162.eu-west-2.compute.internal
 
 
 [kube-node]
-ip-10-250-206-157.eu-west-2.compute.internal
-ip-10-250-217-192.eu-west-2.compute.internal
-ip-10-250-204-124.eu-west-2.compute.internal
-ip-10-250-223-3.eu-west-2.compute.internal
+ip-10-250-202-43.eu-west-2.compute.internal
+ip-10-250-221-207.eu-west-2.compute.internal
+ip-10-250-198-98.eu-west-2.compute.internal
+ip-10-250-223-234.eu-west-2.compute.internal
 
 
 [etcd]
-ip-10-250-197-180.eu-west-2.compute.internal
+ip-10-250-195-155.eu-west-2.compute.internal
 
 
 [k8s-cluster:children]
@@ -33,5 +33,5 @@ kube-master
 
 
 [k8s-cluster:vars]
-apiserver_loadbalancer_domain_name="kubernetes-elb-k8scluster-673657614.eu-west-2.elb.amazonaws.com"
+apiserver_loadbalancer_domain_name="kubernetes-elb-k8scluster-8570162.eu-west-2.elb.amazonaws.com"
 
