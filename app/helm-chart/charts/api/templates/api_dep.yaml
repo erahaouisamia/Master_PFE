@@ -17,7 +17,7 @@ spec:
       containers:
         - name: backend
           image: {{ .Values.image.repository }}
-           command:
+          command:
           - "java"
           - "-javaagent:/apm-agent.jar"
           - "-Delastic.apm.active=$(ELASTIC_APM_ACTIVE)"
