@@ -1,6 +1,5 @@
-image:
-  repository: repos.nexus.com:48083/frontend
-  tag: 1
+image: repos.nexus.com:48083/frontend
+imageTag: 1
 
 replicaCount: 1
 
