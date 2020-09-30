@@ -1,0 +1,9 @@
+image:
+  repository: repos.nexus.com:48083/frontend
+  tag: 1
+
+replicaCount: 1
+
+service:
+  type: NodePort
+  port: 80

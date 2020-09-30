@@ -18,15 +18,8 @@ spec:
   - host: {{ .host.domain }}
     http:
       paths:
-      {{- if .host.chart }}
-      - path: /restapi/(.+)
+      - path: /*
         backend:
-          serviceName: {{ $.Release.Name }}-{{ .host.chart }}
+          serviceName: {{ $.Release.Name}}-{{ .host.chart }}
           servicePort: {{ .host.port }}
-      {{ else }}
-      - path: /(.*)
-        backend:
-          serviceName: {{ include "crud.fullname" $ }}
-          servicePort: {{ .host.port }}
-      {{- end }}
   {{- end }}
