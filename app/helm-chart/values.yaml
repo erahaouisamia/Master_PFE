@@ -21,10 +21,10 @@ ingress:
     alb.ingress.kubernetes.io/target-type: instance
   hosts:
     - host:
-        domain: crudemployee.com
+        domain: frontend.employees-app.tk
         chart: frontend
         port: 80
     - host:
-        domain: api.crudemployee.com
+        domain: employees-app.tk
         chart: api
         port: 8090
