@@ -1,5 +1,5 @@
 image: repos.nexus.com:48083/frontend
-imageTag: "v2"
+imageTag: "v1"
 
 replicaCount: 1
 
