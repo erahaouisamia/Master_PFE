@@ -12,8 +12,3 @@ spec:
     git: ssh://git@github.com/erahaouisamia/repo_idemia.git
     path: app/helm-chart
     ref: master
-  values:
-    image:
-      - registry.opensource.zalan.do/teapot/external-dns
-      - repos.nexus.com:48083/frontend
-      - repos.nexus.com:48083/backend
