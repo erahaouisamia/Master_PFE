@@ -5,7 +5,7 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: glob:v*
+    filter.fluxcd.io/chart-image: glob:v*
 spec:
   releaseName: crud-app
   chart:
