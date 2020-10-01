@@ -13,5 +13,7 @@ spec:
     path: app/helm-chart
     ref: master
   values:
-    image: repos.nexus.com:48083/backend
-    image: repos.nexus.com:48083/frontend
+    image: 
+      - repos.nexus.com:48083/backend
+      - repos.nexus.com:48083/frontend
+      - registry.opensource.zalan.do/teapot/external-dns
