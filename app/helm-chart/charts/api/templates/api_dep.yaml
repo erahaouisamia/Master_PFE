@@ -4,7 +4,7 @@ metadata:
   name: {{ include "api.fullname" . }}
   annotations:
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.backend: glob:v*
+    filter.fluxcd.io/backend: glob:v*
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
