@@ -14,9 +14,11 @@ spec:
     path: app/helm-chart
     ref: master
   values:
-    backend:
-      image: repos.nexus.com:48083/backend
-      imageTag: v1
+    api:
+      backend:
+        image: repos.nexus.com:48083/backend
+        imageTag: v1
     frontend:
-      image: repos.nexus.com:48083/frontend
-      imageTag: v1
+      frontend:
+        image: repos.nexus.com:48083/frontend
+        imageTag: v1
