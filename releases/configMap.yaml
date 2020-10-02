@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: values-helm
+data:
+  values.yaml: |
+    api:
+      image: repos.nexus.com:48083/backend
+      imageTag: v1
+    frontend:
+      image: repos.nexus.com:48083/frontend
+      imageTag: v1
