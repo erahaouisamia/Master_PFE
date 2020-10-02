@@ -13,11 +13,8 @@ spec:
     git: ssh://git@github.com/erahaouisamia/repo_idemia.git
     path: app/helm-chart
     ref: master
-  values:
-    api:
-      image: repos.nexus.com:48083/backend
-      imageTag: v1
-    frontend:
-      image: repos.nexus.com:48083/frontend
-      imageTag: v1
-    #imageTag: v2
+  valuesFrom:
+  - configMapKeyRef:
+      name: values-helm
+      key: values.yaml
+      optional: false
