@@ -4,7 +4,7 @@ metadata:
   name: {{ include "crud.fullname" . }}
   annotations:
     fluxcd.io/automated: "true"
-    filter.fluxcd.io/chart-image: glob:v*
+    fluxcd.io/tag.backend: glob:v*
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
