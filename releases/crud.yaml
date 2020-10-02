@@ -15,7 +15,9 @@ spec:
     ref: master
   values:
     api:
-      image: repos.nexus.com:48083/backend:v1
+      image: repos.nexus.com:48083/backend
+      imageTag: v1
     frontend:
-      image: repos.nexus.com:48083/frontend:v1
+      image: repos.nexus.com:48083/frontend
+      imageTag: v1
     #imageTag: v2
