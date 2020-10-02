@@ -21,4 +21,4 @@ spec:
     frontend:
       frontend:
         image: repos.nexus.com:48083/frontend
-        imageTag: v1
+        imageTag: v2
