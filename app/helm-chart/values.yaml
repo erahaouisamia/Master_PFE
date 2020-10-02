@@ -7,7 +7,7 @@ global:
 
 api:
   db:
-    dbip: 192.168.1.15
+    dbip:
     dbport: 5432
     username: postgres
     password: postgres
@@ -19,6 +19,7 @@ ingress:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/certificate-arn:  arn:aws:acm:eu-west-2:305249848038:certificate/f75f2f6c-7a9f-4681-b6b0-3873417aaa47
   hosts:
     - host:
         domain: frontend.employees-app.tk

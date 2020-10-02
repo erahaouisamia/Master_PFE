@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class EmployeeService {
 
-  private baseUrl = 'http://employees-app.tk/api/v1/employees';
+  private baseUrl = 'https://employees-app.tk/api/v1/employees';
 
   constructor(private http: HttpClient) { }
 

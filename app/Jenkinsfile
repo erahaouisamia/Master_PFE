@@ -4,7 +4,9 @@ pipeline {
 			label 'slave'
 		}
 	}
-
+	triggers {
+  		pollSCM 'H/2 * * * *'
+	}
 	stages {
 		stage('Git Checkout'){
 			steps{
@@ -47,10 +49,10 @@ pipeline {
 		stage('build docker images'){
 			steps{
 				dir("${env.WORKSPACE}/app/crud-api"){
-					sh 'docker build -t backend:${BUILD_NUMBER} .'
+					sh 'docker build -t backend:v${BUILD_NUMBER} .'
 				}
 				dir("${env.WORKSPACE}/app/crud-frontend"){
-					sh 'docker build -t frontend:${BUILD_NUMBER} .'
+					sh 'docker build -t frontend:v${BUILD_NUMBER} .'
 				}
 			}
 		}
@@ -59,10 +61,10 @@ pipeline {
 			withCredentials([usernamePassword(credentialsId: 'nexus-registry', usernameVariable: 'nexus_user', passwordVariable: 'nexus_password')]){
 			//withDockerRegistry(credentialsId: 'nexus-registry', url: 'http://172.17.0.2:8083') {
 				sh 'docker login -u \$nexus_user -p \$nexus_password repos.nexus.com:48083'
-				sh 'docker tag backend:${BUILD_NUMBER} repos.nexus.com:48083/backend:\${BUILD_NUMBER}'
-				sh 'docker push repos.nexus.com:48083/backend:\${BUILD_NUMBER}'
-				sh 'docker tag frontend:\${BUILD_NUMBER} repos.nexus.com:48083/frontend:\${BUILD_NUMBER}'
-				sh 'docker push repos.nexus.com:48083/frontend:\${BUILD_NUMBER}'
+				sh 'docker tag backend:v${BUILD_NUMBER} repos.nexus.com:48083/backend:v${BUILD_NUMBER}'
+				sh 'docker push repos.nexus.com:48083/backend:v${BUILD_NUMBER}'
+				sh 'docker tag frontend:v${BUILD_NUMBER} repos.nexus.com:48083/frontend:v${BUILD_NUMBER}'
+				sh 'docker push repos.nexus.com:48083/frontend:v${BUILD_NUMBER}'
 			}
 		    }
         	}

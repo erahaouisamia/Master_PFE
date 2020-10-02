@@ -16,7 +16,7 @@ filebeatConfig:
 
     output.elasticsearch:
       host: '${NODE_NAME}'
-      hosts: '${ELASTICSEARCH_HOSTS:192.168.1.16:30259}'
+      hosts: '${ELASTICSEARCH_HOSTS:192.168.1.16:30001}'
 
 # Extra environment variables to append to the DaemonSet pod spec.
 # This will be appended to the current 'env:' key. You can use any of the kubernetes env
@@ -52,7 +52,7 @@ envFrom: []
 hostPathRoot: /var/lib
 hostNetworking: false
 image: "docker.elastic.co/beats/filebeat"
-imageTag: "8.0.0-SNAPSHOT"
+imageTag: "7.9.2"
 imagePullPolicy: "IfNotPresent"
 imagePullSecrets: []
 

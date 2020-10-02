@@ -2,9 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "crud.fullname" . }}
-  annotations:
-    fluxcd.io/automated: "true"
-    filter.fluxcd.io/frontend: glob:v*
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

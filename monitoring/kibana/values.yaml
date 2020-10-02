@@ -1,5 +1,5 @@
 ---
-elasticsearchHosts: "http://192.168.1.15:32326"
+elasticsearchHosts: "http://192.168.1.15:30001"
 
 replicas: 1
 
@@ -29,7 +29,7 @@ secretMounts: []
 #    subPath: kibana.keystore # optional
 
 image: "docker.elastic.co/kibana/kibana"
-imageTag: "8.0.0-SNAPSHOT"
+imageTag: "7.9.2"
 imagePullPolicy: "IfNotPresent"
 
 # additionals labels
@@ -112,14 +112,15 @@ ingress:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-2:305249848038:certificate/01f218bc-168a-4f7a-a97c-c27e2d4a378e
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
-    - kibana.com
-  tls:
-    - secretName: ssl
-      hosts:
-        - kibana.com
+    - kibana.tk
+  #tls:
+    #- secretName: ssl
+      #hosts:
+        #- kibana.com
 
 readinessProbe:
   failureThreshold: 3

@@ -8,7 +8,7 @@ apmConfig:
     queue: {}
 
     output.elasticsearch:
-      hosts: ["http://192.168.1.16:30259"]
+      hosts: ["http://192.168.1.16:30001"]
       ## If you have security enabled- you'll need to add the credentials
       ## as environment variables
       # username: "${ELASTICSEARCH_USERNAME}"
