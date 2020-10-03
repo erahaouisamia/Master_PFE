@@ -16,8 +16,7 @@ spec:
         - name: {{ .Values.global.RegSec }}
       containers:
         - name: frontend
-          image: {{ .Values.image }}
-          #:{{ .Values.imageTag }}
+          image: "{{ .Values.image }}:{{ .Values.imageTag }}"
           ports:
             - containerPort: 80
           imagePullPolicy: IfNotPresent
