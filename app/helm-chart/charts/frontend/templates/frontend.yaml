@@ -16,7 +16,7 @@ spec:
         - name: {{ .Values.global.RegSec }}
       containers:
         - name: frontend
-          image: {{ .Values.image }}
+          image: repos.nexus.com:48083/frontend:v1 #{{ .Values.image }}
           #:{{ .Values.imageTag }}"
           ports:
             - containerPort: 80
