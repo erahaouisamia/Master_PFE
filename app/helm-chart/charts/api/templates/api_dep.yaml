@@ -16,7 +16,7 @@ spec:
         - name: {{ .Values.global.RegSec }}
       containers:
         - name: backend
-          image: {{ .Values.image }}
+          image: repos.nexus.com:48083/backend:v1 #{{ .Values.image }}
           #:{{ .Values.imageTag }}
           #command:
             #- "java"
