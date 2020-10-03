@@ -13,3 +13,5 @@ spec:
     git: ssh://git@github.com/erahaouisamia/repo_idemia.git
     path: app/helm-chart
     ref: master
+  values:
+    image: repos.nexus.com:48083/backend:v1
