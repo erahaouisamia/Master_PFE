@@ -6,7 +6,7 @@ global:
   RegSec: prvrg
 
 api:
-  db:
+  db: 10.250.200.81
     dbip:
     dbport: 5432
     username: postgres
