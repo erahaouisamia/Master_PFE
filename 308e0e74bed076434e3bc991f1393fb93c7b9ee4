@@ -1,0 +1,1 @@
+{"jobID":"7a5e63bc-4bc7-c071-428b-fb3f9d7503eb","spec":{"type":"policy","cause":{"Message":"","User":""},"spec":{"kube-system:deployment/alb-ingress-controller":{"add":{"automated":"true"},"remove":{}}}},"result":null}
